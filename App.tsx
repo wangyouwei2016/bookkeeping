@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Layout from './components/Layout';
 import TransactionList from './components/TransactionList';
@@ -498,15 +499,24 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
     }, [] as { name: string; value: number }[])
     .sort((a, b) => b.value - a.value);
 
-  const userData = filteredTransactions
-    .filter(t => t.type === 'expense')
-    .reduce((acc, curr) => {
-      const displayName = curr.user === 'husband' ? '丈夫' : '妻子';
-      const found = acc.find(item => item.name === displayName);
-      if (found) found.value += curr.amount;
-      else acc.push({ name: displayName, value: curr.amount });
-      return acc;
-    }, [] as { name: string; value: number }[]);
+  // New logic: User Income vs Expense
+  const userStatsMap = {
+    husband: { name: '丈夫', income: 0, expense: 0 },
+    wife: { name: '妻子', income: 0, expense: 0 }
+  };
+
+  filteredTransactions.forEach(t => {
+    const u = t.user as 'husband' | 'wife';
+    if (userStatsMap[u]) {
+      if (t.type === 'income') {
+         userStatsMap[u].income += t.amount;
+      } else {
+         userStatsMap[u].expense += t.amount;
+      }
+    }
+  });
+  
+  const userStatsData = [userStatsMap.husband, userStatsMap.wife];
 
   const totalExpense = filteredTransactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
   const totalIncome = filteredTransactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
@@ -565,10 +575,26 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
          </div>
       </div>
 
-      {expenseData.length > 0 ? (
+      {expenseData.length > 0 || totalIncome > 0 ? (
         <>
           <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">支出分类</h3>
+            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">收支情况</h3>
+            <div className="h-64 w-full">
+               <ResponsiveContainer width="100%" height="100%">
+                  <BarChart layout="vertical" data={userStatsData} barGap={4} margin={{ left: 10, right: 10, top: 10, bottom: 10 }}>
+                    <XAxis type="number" hide />
+                    <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={40} style={{fontSize: '12px', fontWeight: 'bold'}} />
+                    <RechartsTooltip formatter={(value: number) => `¥${value.toFixed(2)}`} cursor={{fill: 'transparent'}} />
+                    <Legend verticalAlign="top" align="right" iconType="circle" height={36}/>
+                    <Bar dataKey="income" name="收入" fill="#10b981" radius={[0, 4, 4, 0]} barSize={20} />
+                    <Bar dataKey="expense" name="支出" fill="#f43f5e" radius={[0, 4, 4, 0]} barSize={20} />
+                  </BarChart>
+               </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">支出分类占比</h3>
             <div className="h-64 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
@@ -591,23 +617,9 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
                 </ResponsiveContainer>
             </div>
           </div>
-
-          <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">贡献对比 (支出)</h3>
-            <div className="h-40">
-               <ResponsiveContainer width="100%" height="100%">
-                  <BarChart layout="vertical" data={userData}>
-                    <XAxis type="number" hide />
-                    <YAxis dataKey="name" type="category" width={40} axisLine={false} tickLine={false} />
-                    <RechartsTooltip formatter={(value: number) => `¥${value.toFixed(2)}`} />
-                    <Bar dataKey="value" fill="#14b8a6" radius={[0, 4, 4, 0]} barSize={20} />
-                  </BarChart>
-               </ResponsiveContainer>
-            </div>
-          </div>
         </>
       ) : (
-        <div className="text-center py-10 text-gray-400">该时间段暂无支出数据</div>
+        <div className="text-center py-10 text-gray-400">该时间段暂无数据</div>
       )}
     </div>
   );

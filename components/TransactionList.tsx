@@ -1,7 +1,7 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Transaction } from '../types';
-import { ShoppingBag, Coffee, Car, Home, Film, DollarSign, Activity, Briefcase, Gift, GraduationCap, Baby } from 'lucide-react';
+import { ShoppingBag, Coffee, Car, Home, Film, DollarSign, Activity, Briefcase, Gift, GraduationCap, Baby, Trash2, ShieldCheck, Receipt, AlertTriangle } from 'lucide-react';
 
 interface TransactionListProps {
   transactions: Transaction[];
@@ -12,9 +12,11 @@ const getCategoryIcon = (category: string) => {
   switch (category) {
     case '餐饮': return <Coffee size={18} />;
     case '购物': return <ShoppingBag size={18} />;
+    case '生活费用': return <Receipt size={18} />;
     case '交通': return <Car size={18} />;
     case '居住': return <Home size={18} />;
     case '娱乐': return <Film size={18} />;
+    case '保险': return <ShieldCheck size={18} />;
     case '工资': return <DollarSign size={18} />;
     case '医疗': return <Activity size={18} />;
     case '旅行': return <Briefcase size={18} />;
@@ -41,6 +43,9 @@ const formatUser = (user: string) => {
 };
 
 const TransactionList: React.FC<TransactionListProps> = ({ transactions, onDelete }) => {
+  // State to track which item is being deleted. If null, modal is closed.
+  const [itemToDelete, setItemToDelete] = useState<Transaction | null>(null);
+
   if (transactions.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-gray-400">
@@ -52,53 +57,104 @@ const TransactionList: React.FC<TransactionListProps> = ({ transactions, onDelet
     );
   }
 
+  const confirmDelete = () => {
+    if (itemToDelete) {
+      onDelete(itemToDelete.id);
+      setItemToDelete(null);
+    }
+  };
+
   return (
-    <div className="space-y-3 pb-4">
-      {transactions.map((t) => (
-        <div key={t.id} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex items-center justify-between group active:scale-[0.99] transition-transform">
-          <div className="flex items-center gap-3">
-            <div className={`p-2.5 rounded-full ${
-              t.type === 'expense' ? 'bg-red-50 text-red-500' : 'bg-green-50 text-green-500'
-            }`}>
-              {getCategoryIcon(t.category)}
+    <>
+      <div className="space-y-3 pb-4">
+        {transactions.map((t) => (
+          <div key={t.id} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex items-center justify-between active:bg-gray-50 transition-colors relative group">
+            <div className="flex items-center gap-3 overflow-hidden">
+              <div className={`p-2.5 rounded-full shrink-0 ${
+                t.type === 'expense' ? 'bg-red-50 text-red-500' : 'bg-green-50 text-green-500'
+              }`}>
+                {getCategoryIcon(t.category)}
+              </div>
+              <div className="min-w-0">
+                <div className="font-semibold text-gray-800 truncate">{t.category}</div>
+                <div className="text-xs text-gray-400 flex items-center gap-1 flex-wrap">
+                  <span className="shrink-0">{formatDate(t.date)}</span>
+                  <span className="w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                  <span className={`px-1.5 py-0.5 rounded text-[10px] shrink-0 ${t.user === 'husband' ? 'bg-blue-50 text-blue-600' : 'bg-pink-50 text-pink-600'}`}>
+                    {formatUser(t.user)}
+                  </span>
+                  {t.note && (
+                    <>
+                      <span className="w-1 h-1 bg-gray-300 rounded-full shrink-0"></span>
+                      <span className="truncate max-w-[100px] sm:max-w-[150px]">{t.note}</span>
+                    </>
+                  )}
+                </div>
+              </div>
             </div>
-            <div>
-              <div className="font-semibold text-gray-800">{t.category}</div>
-              <div className="text-xs text-gray-400 flex items-center gap-1">
-                <span>{formatDate(t.date)}</span>
-                <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
-                <span className={`px-1.5 py-0.5 rounded text-[10px] ${t.user === 'husband' ? 'bg-blue-50 text-blue-600' : 'bg-pink-50 text-pink-600'}`}>
-                  {formatUser(t.user)}
-                </span>
-                {t.note && (
-                  <>
-                    <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
-                    <span className="max-w-[100px] truncate">{t.note}</span>
-                  </>
-                )}
+            
+            <div className="text-right flex items-center gap-2 shrink-0">
+              <div className={`font-bold mr-1 ${
+                t.type === 'expense' ? 'text-gray-900' : 'text-green-600'
+              }`}>
+                {t.type === 'expense' ? '-' : '+'}
+                {t.amount.toFixed(2)}
+              </div>
+              
+              {/* Delete Button - Using custom state instead of window.confirm */}
+              <button 
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setItemToDelete(t);
+                }}
+                className="p-3 -mr-3 text-gray-300 hover:text-red-500 transition-colors relative z-10 active:scale-95 active:text-red-500"
+                aria-label="删除"
+              >
+                <Trash2 size={18} />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Custom Delete Confirmation Modal */}
+      {itemToDelete && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm animate-in fade-in duration-200" onClick={() => setItemToDelete(null)}>
+          <div 
+            className="bg-white rounded-2xl w-full max-w-xs shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-6 text-center">
+              <div className="w-12 h-12 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <AlertTriangle size={24} />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">删除确认</h3>
+              <p className="text-sm text-gray-500 mb-6">
+                您确定要删除这笔 <span className="font-bold text-gray-800">{itemToDelete.category}</span> 的记录吗？
+                <br />
+                金额：<span className="font-bold text-gray-800">¥{itemToDelete.amount}</span>
+              </p>
+              
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => setItemToDelete(null)}
+                  className="flex-1 py-3 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl transition-colors"
+                >
+                  取消
+                </button>
+                <button 
+                  onClick={confirmDelete}
+                  className="flex-1 py-3 px-4 bg-red-500 hover:bg-red-600 text-white font-bold rounded-xl shadow-lg shadow-red-200 transition-colors"
+                >
+                  删除
+                </button>
               </div>
             </div>
           </div>
-          <div className="text-right flex items-center gap-3">
-            <div className={`font-bold ${
-              t.type === 'expense' ? 'text-gray-900' : 'text-green-600'
-            }`}>
-              {t.type === 'expense' ? '-' : '+'}
-              {t.amount.toFixed(2)}
-            </div>
-             <button 
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if(confirm("确定要删除这条记录吗？")) onDelete(t.id);
-                }}
-                className="text-xs text-red-400 bg-red-50 px-2 py-1 rounded hover:bg-red-100 opacity-0 group-hover:opacity-100 transition-opacity"
-             >
-               删除
-             </button>
-          </div>
         </div>
-      ))}
-    </div>
+      )}
+    </>
   );
 };
 
