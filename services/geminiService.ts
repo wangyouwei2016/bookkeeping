@@ -3,12 +3,16 @@ import { CATEGORIES, GeminiParseResult } from "../types";
 
 const parseTransactionWithGemini = async (input: string): Promise<GeminiParseResult | null> => {
   try {
-    if (!process.env.API_KEY) {
-      console.warn("Gemini API Key is missing");
+    // Support both Vite (import.meta.env) and standard Node (process.env) for compatibility
+    // In Vercel + Vite, use VITE_API_KEY
+    const apiKey = import.meta.env.VITE_API_KEY || (typeof process !== 'undefined' ? process.env.API_KEY : undefined);
+
+    if (!apiKey) {
+      console.warn("Gemini API Key is missing. Please set VITE_API_KEY in Vercel environment variables.");
       return null;
     }
 
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    const ai = new GoogleGenAI({ apiKey: apiKey });
     
     // Construct the context for the AI
     const expenseCats = CATEGORIES.expense.join(", ");

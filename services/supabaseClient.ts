@@ -4,9 +4,18 @@ import { APP_CONFIG } from '../config';
 
 let supabaseInstance: SupabaseClient | null = null;
 
-// 安全获取环境变量
+// 安全获取环境变量 (兼容 Vite 和 Node)
 const getEnv = (key: string) => {
   try {
+    // 1. Vite Environment
+    if (typeof import.meta !== 'undefined' && import.meta.env) {
+      // Vite 默认需要 VITE_ 前缀才能暴露给前端
+      const viteKey = 'VITE_' + key;
+      if (import.meta.env[viteKey]) return import.meta.env[viteKey];
+      if (import.meta.env[key]) return import.meta.env[key];
+    }
+    
+    // 2. Node Environment (Fallback)
     // @ts-ignore
     if (typeof process !== 'undefined' && process.env) {
       // @ts-ignore
@@ -38,7 +47,7 @@ export const getStoredConfig = () => {
     };
   }
 
-  // 3. 最后尝试读取环境变量 (构建时注入)
+  // 3. 最后尝试读取环境变量 (构建时注入，例如在 Vercel 中设置了 VITE_SUPABASE_URL)
   return {
     url: (getEnv('SUPABASE_URL') || '').trim(),
     key: (getEnv('SUPABASE_ANON_KEY') || '').trim()
