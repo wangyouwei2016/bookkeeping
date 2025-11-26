@@ -9,14 +9,14 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange }) => {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 max-w-md mx-auto shadow-2xl overflow-hidden relative">
+    <div className="flex flex-col min-h-screen bg-gray-50 w-full sm:max-w-md sm:mx-auto sm:shadow-2xl sm:overflow-hidden relative">
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto no-scrollbar pb-24">
+      <main className="flex-1 overflow-y-auto no-scrollbar pb-28">
         {children}
       </main>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 w-full max-w-md bg-white border-t border-gray-100 flex justify-around items-center py-3 pb-safe z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+      <nav className="fixed bottom-0 left-0 right-0 mx-auto w-full sm:max-w-md bg-white border-t border-gray-100 flex justify-around items-center pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
         <button
           onClick={() => onTabChange('home')}
           className={`flex flex-col items-center gap-1 transition-colors ${
