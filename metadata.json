@@ -1,0 +1,7 @@
+{
+  "name": "bookkeeping",
+  "description": "一款专为夫妻设计的极简 AI 记账工具。",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
