@@ -5,8 +5,8 @@ import { Transaction, UserType, TransactionType, CATEGORIES } from './types';
 import { parseTransactionWithGemini } from './services/geminiService';
 import { getSupabase, saveSupabaseConfig, clearSupabaseConfig, testConnection, getStoredConfig, initSupabase } from './services/supabaseClient';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend, BarChart, Bar, XAxis, YAxis } from 'recharts';
-import { Mic, Send, Sparkles, Loader2, User as UserIcon, Calendar, Tag, FileText, LogOut, Database, Settings, AlertCircle } from 'lucide-react';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend, BarChart, Bar, XAxis, YAxis, LineChart, Line, CartesianGrid, ReferenceLine } from 'recharts';
+import { Mic, Send, Sparkles, Loader2, User as UserIcon, Calendar, Tag, FileText, LogOut, Database, Settings, AlertCircle, CloudCog } from 'lucide-react';
 
 // --- Components ---
 
@@ -58,60 +58,67 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-8 text-center">
-      <div className="w-32 h-32 bg-gray-900 rounded-[2rem] flex items-center justify-center mb-10 shadow-2xl">
-        <Database size={64} className="text-white" />
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 to-brand-100 flex flex-col items-center justify-center p-8 text-center relative overflow-hidden">
+       {/* Background decoration */}
+       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-40">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[30%] bg-blue-200 rounded-full blur-[100px]"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[30%] bg-pink-200 rounded-full blur-[100px]"></div>
       </div>
-      <h1 className="text-4xl font-bold text-gray-800 mb-6">连接云端账本</h1>
-      <p className="text-gray-500 mb-12 text-2xl max-w-sm leading-relaxed">
-        为了支持多人同步，请配置 Supabase 数据库。
-      </p>
 
-      {error && (
-        <div className="bg-red-50 text-red-600 p-6 rounded-3xl text-xl mb-8 flex items-start gap-4 max-w-md w-full text-left border border-red-100">
-          <AlertCircle size={32} className="shrink-0 mt-1" />
-          <span className="break-all font-medium">{error}</span>
+      <div className="bg-white/80 backdrop-blur-xl p-10 rounded-[4rem] w-full max-w-2xl shadow-2xl border border-white z-10">
+        <div className="w-40 h-40 bg-brand-500 rounded-[3rem] flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-brand-200 rotate-3">
+          <CloudCog size={80} className="text-white" />
         </div>
-      )}
+        <h1 className="text-6xl font-bold text-gray-800 mb-6 tracking-tight">连接云端账本</h1>
+        <p className="text-gray-500 mb-12 text-3xl max-w-lg mx-auto leading-relaxed">
+          为了支持夫妻同步记账，<br/>我们需要连接 Supabase 数据库。
+        </p>
 
-      <form onSubmit={handleSave} className="w-full max-w-md space-y-8 text-left">
-        <div>
-          <label className="block text-2xl font-bold text-gray-500 mb-4">Project URL</label>
-          <input 
-            type="text" 
-            value={url}
-            onChange={e => setUrl(e.target.value)}
-            placeholder="https://xyz.supabase.co"
-            className="w-full p-6 bg-white border border-gray-200 rounded-3xl text-2xl focus:ring-4 focus:ring-brand-500 outline-none font-mono shadow-sm"
-            required
-          />
-        </div>
-        <div>
-          <label className="block text-2xl font-bold text-gray-500 mb-4">Anon Public Key</label>
-          <input 
-            type="password" 
-            value={key}
-            onChange={e => setKey(e.target.value)}
-            placeholder="eyJxh..."
-            className="w-full p-6 bg-white border border-gray-200 rounded-3xl text-2xl focus:ring-4 focus:ring-brand-500 outline-none font-mono shadow-sm"
-            required
-          />
-        </div>
-        
-        <button 
-          type="submit"
-          disabled={isTesting}
-          className="w-full py-8 bg-brand-600 text-white rounded-[2.5rem] font-bold shadow-xl shadow-brand-200 hover:bg-brand-700 transition-all mt-10 disabled:opacity-70 flex items-center justify-center gap-4 text-3xl"
-        >
-          {isTesting && <Loader2 size={36} className="animate-spin" />}
-          {isTesting ? '验证中...' : '连接数据库'}
-        </button>
-        
-        <div className="text-lg text-gray-400 mt-12 leading-relaxed bg-gray-100 p-6 rounded-3xl">
-           <strong className="text-gray-600 block mb-3 text-xl">首次使用？</strong>
-           请在 Supabase SQL Editor 运行建表语句。
-        </div>
-      </form>
+        {error && (
+          <div className="bg-red-50 text-red-600 p-8 rounded-[2.5rem] text-2xl mb-10 flex items-start gap-4 text-left border border-red-100 animate-in fade-in slide-in-from-top-4">
+            <AlertCircle size={40} className="shrink-0 mt-1" />
+            <span className="break-all font-bold">{error}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleSave} className="space-y-10 text-left">
+          <div>
+            <label className="block text-3xl font-bold text-gray-600 mb-4 pl-4">Project URL</label>
+            <input 
+              type="text" 
+              value={url}
+              onChange={e => setUrl(e.target.value)}
+              placeholder="https://xyz.supabase.co"
+              className="w-full p-8 bg-gray-50/50 border-2 border-gray-200 rounded-[3rem] text-3xl focus:ring-8 focus:ring-brand-500/20 focus:border-brand-500 outline-none font-mono shadow-inner transition-all placeholder-gray-300"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-3xl font-bold text-gray-600 mb-4 pl-4">Anon Public Key</label>
+            <input 
+              type="password" 
+              value={key}
+              onChange={e => setKey(e.target.value)}
+              placeholder="eyJxh..."
+              className="w-full p-8 bg-gray-50/50 border-2 border-gray-200 rounded-[3rem] text-3xl focus:ring-8 focus:ring-brand-500/20 focus:border-brand-500 outline-none font-mono shadow-inner transition-all placeholder-gray-300"
+              required
+            />
+          </div>
+          
+          <button 
+            type="submit"
+            disabled={isTesting}
+            className="w-full py-10 bg-gray-900 text-white rounded-[3rem] font-bold shadow-xl shadow-gray-400/40 hover:bg-black transition-all mt-12 disabled:opacity-70 flex items-center justify-center gap-6 text-4xl active:scale-[0.98]"
+          >
+            {isTesting && <Loader2 size={48} className="animate-spin" />}
+            {isTesting ? '验证中...' : '立即连接'}
+          </button>
+          
+          <div className="text-2xl text-gray-400 mt-12 text-center font-medium">
+             首次使用请先在 Supabase 创建表
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
@@ -178,8 +185,6 @@ const Dashboard = ({
   onChangeUser: () => void,
   isLoading: boolean
 }) => {
-  const totalBalance = transactions.reduce((acc, t) => t.type === 'income' ? acc + t.amount : acc - t.amount, 0);
-  
   // Get current month stats
   const now = new Date();
   const currentMonthTransactions = transactions.filter(t => {
@@ -189,6 +194,9 @@ const Dashboard = ({
 
   const monthExpense = currentMonthTransactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
   const monthIncome = currentMonthTransactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
+  
+  // Requirement: Main balance shows "Monthly Balance" instead of Total
+  const monthBalance = monthIncome - monthExpense;
 
   return (
     <div className="p-8 space-y-14">
@@ -209,9 +217,9 @@ const Dashboard = ({
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 group-hover:scale-110 transition-transform duration-700"></div>
         
         <div className="relative z-10">
-          <div className="text-brand-100 text-3xl font-medium mb-6">家庭总结余</div>
+          <div className="text-brand-100 text-3xl font-medium mb-6">本月结余</div>
           <div className="text-8xl font-extrabold mb-14 tracking-tight leading-none">
-            {isLoading ? '...' : `¥${totalBalance.toFixed(0)}`}
+            {isLoading ? '...' : `¥${monthBalance.toFixed(0)}`}
           </div>
           
           <div className="flex gap-10">
@@ -528,6 +536,26 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
   const totalExpense = filteredTransactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
   const totalIncome = filteredTransactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
 
+  // --- Annual Trend Data Logic ---
+  let annualTrendData: { name: string; balance: number }[] = [];
+  if (timeFilter === 'year') {
+    // Generate data for 12 months
+    annualTrendData = Array.from({ length: 12 }, (_, i) => {
+      const monthIndex = i;
+      // Filter transactions for this month in the selected year
+      const monthTrans = transactions.filter(t => {
+        const d = new Date(t.date);
+        return d.getFullYear() === selectedDate.getFullYear() && d.getMonth() === monthIndex;
+      });
+      const mInc = monthTrans.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+      const mExp = monthTrans.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+      return {
+        name: `${i + 1}月`,
+        balance: mInc - mExp
+      };
+    });
+  }
+
   const COLORS = ['#f43f5e', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#6366f1'];
   
   return (
@@ -582,7 +610,37 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
          </div>
       </div>
 
-      {expenseData.length > 0 || totalIncome > 0 ? (
+      {/* Annual Trend Chart (Only for Year view) */}
+      {timeFilter === 'year' && (
+        <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-gray-100">
+          <h3 className="text-3xl font-bold text-gray-500 uppercase tracking-wider mb-12">存钱趋势 (月度结余)</h3>
+          <div className="h-96 w-full">
+             <ResponsiveContainer width="100%" height="100%">
+               <LineChart data={annualTrendData} margin={{ left: 10, right: 30, top: 20, bottom: 10 }}>
+                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 20, fill: '#9ca3af', dy: 20}} />
+                 <ReferenceLine y={0} stroke="#9ca3af" strokeDasharray="3 3" />
+                 <RechartsTooltip 
+                   formatter={(value: number) => `¥${value.toFixed(0)}`}
+                   contentStyle={{ borderRadius: '24px', border: 'none', boxShadow: '0 10px 20px -5px rgba(0, 0, 0, 0.1)', fontSize: '20px', padding: '16px' }}
+                   labelStyle={{ fontWeight: 'bold', color: '#374151', marginBottom: '8px' }}
+                 />
+                 <Line 
+                   type="monotone" 
+                   dataKey="balance" 
+                   name="结余"
+                   stroke="#14b8a6" 
+                   strokeWidth={5} 
+                   dot={{ r: 6, fill: '#14b8a6', strokeWidth: 4, stroke: '#fff' }}
+                   activeDot={{ r: 10, strokeWidth: 0 }}
+                 />
+               </LineChart>
+             </ResponsiveContainer>
+          </div>
+        </div>
+      )}
+
+      {(expenseData.length > 0 || totalIncome > 0) ? (
         <>
           <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-gray-100">
             <h3 className="text-3xl font-bold text-gray-500 uppercase tracking-wider mb-12">收支对比</h3>
