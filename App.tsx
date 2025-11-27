@@ -58,25 +58,29 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col p-8 font-sans overflow-y-auto">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 to-brand-100 flex flex-col p-8 font-sans overflow-y-auto relative overflow-hidden">
        {/* Background decoration */}
-       <div className="absolute top-0 right-0 w-full h-96 bg-gradient-to-b from-brand-50 to-transparent pointer-events-none -z-10"></div>
+       <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+          <div className="absolute top-[-10%] right-[-10%] w-[70%] h-[40%] bg-brand-200 rounded-full blur-[100px] opacity-40"></div>
+          <div className="absolute bottom-[-10%] left-[-20%] w-[70%] h-[40%] bg-blue-200 rounded-full blur-[100px] opacity-40"></div>
+          <div className="absolute top-[40%] left-[20%] w-[40%] h-[20%] bg-white rounded-full blur-[80px] opacity-60"></div>
+       </div>
 
       {/* Header Area */}
-      <div className="mt-16 mb-16 px-6">
-        <div className="w-24 h-24 bg-brand-100 rounded-[2rem] flex items-center justify-center text-brand-600 mb-8 shadow-sm">
+      <div className="mt-16 mb-16 px-6 relative z-10">
+        <div className="w-24 h-24 bg-white rounded-[2rem] flex items-center justify-center text-brand-600 mb-8 shadow-lg shadow-brand-100 ring-4 ring-white/50">
            <Database size={48} />
         </div>
         <h1 className="text-6xl font-extrabold text-gray-900 tracking-tight mb-6 leading-tight">
           私有数据库<br/>连接配置
         </h1>
-        <p className="text-3xl text-gray-500 font-medium leading-relaxed">
+        <p className="text-3xl text-gray-600 font-medium leading-relaxed">
           可以使用您自己的数据库<br/>保证数据的绝对私密性
         </p>
       </div>
 
       {/* Main Form Card */}
-      <div className="bg-white rounded-[3.5rem] p-10 shadow-xl shadow-gray-100 border border-gray-100 mb-10">
+      <div className="bg-white/80 backdrop-blur-xl rounded-[3.5rem] p-10 shadow-xl shadow-brand-900/5 border border-white mb-10 relative z-10">
           
           {error && (
             <div className="bg-red-50 text-red-600 p-6 rounded-[2rem] text-2xl font-bold mb-10 flex items-start gap-4 text-left border border-red-100 animate-in fade-in">
@@ -97,7 +101,7 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
                   value={url}
                   onChange={e => setUrl(e.target.value)}
                   placeholder="https://xyz.supabase.co"
-                  className="w-full h-32 pl-28 pr-8 bg-gray-50 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-[2.5rem] text-3xl font-bold text-gray-900 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all placeholder-gray-300 shadow-inner"
+                  className="w-full h-32 pl-28 pr-8 bg-gray-50/80 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-[2.5rem] text-3xl font-bold text-gray-900 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all placeholder-gray-300 shadow-inner"
                   required
                 />
               </div>
@@ -114,7 +118,7 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
                   value={key}
                   onChange={e => setKey(e.target.value)}
                   placeholder="eyJxh..."
-                  className="w-full h-32 pl-28 pr-8 bg-gray-50 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-[2.5rem] text-3xl font-bold text-gray-900 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all placeholder-gray-300 shadow-inner"
+                  className="w-full h-32 pl-28 pr-8 bg-gray-50/80 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-[2.5rem] text-3xl font-bold text-gray-900 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all placeholder-gray-300 shadow-inner"
                   required
                 />
               </div>
@@ -141,9 +145,9 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
           </form>
       </div>
 
-      <div className="text-center px-8 pb-10">
-          <p className="text-gray-400 text-2xl font-medium leading-relaxed">
-            首次使用请确保已在 Supabase SQL Editor 中创建了 <span className="font-bold text-gray-500 font-mono">transactions</span> 表
+      <div className="text-center px-8 pb-10 relative z-10">
+          <p className="text-gray-500 text-2xl font-medium leading-relaxed">
+            首次使用请确保已在 Supabase SQL Editor 中创建了 <span className="font-bold text-brand-700 font-mono">transactions</span> 表
           </p>
       </div>
     </div>
