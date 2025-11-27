@@ -59,56 +59,56 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
           <div className="absolute bottom-[-10%] left-[-20%] w-[70%] h-[40%] bg-blue-200 rounded-full blur-[100px] opacity-40"></div>
        </div>
 
-      <div className="mt-16 mb-10 px-2 relative z-10 text-center">
-        <div className="w-24 h-24 bg-white rounded-[2rem] flex items-center justify-center text-brand-600 mb-10 shadow-lg shadow-brand-100 ring-4 ring-white/50 mx-auto">
-           <Database size={48} />
+      <div className="mt-10 mb-8 px-2 relative z-10 text-center">
+        <div className="w-20 h-20 bg-white rounded-[1.5rem] flex items-center justify-center text-brand-600 mb-6 shadow-lg shadow-brand-100 ring-4 ring-white/50 mx-auto">
+           <Database size={40} />
         </div>
-        <h1 className="text-5xl font-extrabold text-gray-900 tracking-tight mb-4">
+        <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-3">
           私有账本配置
         </h1>
-        <p className="text-2xl text-gray-600 font-medium">
+        <p className="text-lg text-gray-600 font-medium">
           连接您的 Supabase 数据库
         </p>
       </div>
 
-      <div className="bg-white/80 backdrop-blur-xl rounded-[3rem] p-10 shadow-xl shadow-brand-900/5 border border-white mb-6 relative z-10">
+      <div className="bg-white/80 backdrop-blur-xl rounded-[2.5rem] p-8 shadow-xl shadow-brand-900/5 border border-white mb-6 relative z-10">
           {error && (
-            <div className="bg-red-50 text-red-600 p-6 rounded-3xl text-xl font-bold mb-10 flex items-start gap-4 text-left border border-red-100 animate-in fade-in">
-              <AlertCircle size={32} className="shrink-0 mt-0.5" />
+            <div className="bg-red-50 text-red-600 p-4 rounded-2xl text-lg font-bold mb-8 flex items-start gap-3 text-left border border-red-100 animate-in fade-in">
+              <AlertCircle size={24} className="shrink-0 mt-0.5" />
               <span className="break-all">{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSave} className="space-y-10">
-            <div className="space-y-4">
-              <label className="block text-2xl font-bold text-gray-700 ml-3">Project URL</label>
+          <form onSubmit={handleSave} className="space-y-8">
+            <div className="space-y-3">
+              <label className="block text-xl font-bold text-gray-700 ml-2">Project URL</label>
               <div className="relative group">
-                <div className="absolute left-8 top-1/2 -translate-y-1/2 text-brand-500 transition-colors">
-                  <Globe size={32} />
+                <div className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-500 transition-colors">
+                  <Globe size={24} />
                 </div>
                 <input 
                   type="text" 
                   value={url}
                   onChange={e => setUrl(e.target.value)}
                   placeholder="https://xyz.supabase.co"
-                  className="w-full h-24 pl-20 pr-8 bg-gray-50/80 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-[2rem] text-2xl font-bold text-gray-900 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all placeholder-gray-300 shadow-inner"
+                  className="w-full h-16 pl-16 pr-6 bg-gray-50/80 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-[1.5rem] text-xl font-bold text-gray-900 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all placeholder-gray-300 shadow-inner"
                   required
                 />
               </div>
             </div>
 
-            <div className="space-y-4">
-              <label className="block text-2xl font-bold text-gray-700 ml-3">Anon Public Key</label>
+            <div className="space-y-3">
+              <label className="block text-xl font-bold text-gray-700 ml-2">Anon Public Key</label>
               <div className="relative group">
-                <div className="absolute left-8 top-1/2 -translate-y-1/2 text-brand-500 transition-colors">
-                  <Key size={32} />
+                <div className="absolute left-6 top-1/2 -translate-y-1/2 text-brand-500 transition-colors">
+                  <Key size={24} />
                 </div>
                 <input 
                   type="password" 
                   value={key}
                   onChange={e => setKey(e.target.value)}
                   placeholder="eyJxh..."
-                  className="w-full h-24 pl-20 pr-8 bg-gray-50/80 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-[2rem] text-2xl font-bold text-gray-900 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all placeholder-gray-300 shadow-inner"
+                  className="w-full h-16 pl-16 pr-6 bg-gray-50/80 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-[1.5rem] text-xl font-bold text-gray-900 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all placeholder-gray-300 shadow-inner"
                   required
                 />
               </div>
@@ -117,9 +117,9 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
             <button 
               type="submit"
               disabled={isTesting}
-              className="w-full h-24 mt-8 bg-gradient-to-r from-brand-600 to-brand-500 text-white rounded-[2.5rem] font-bold shadow-xl shadow-brand-200 hover:scale-[1.01] active:scale-[0.98] transition-all disabled:opacity-70 flex items-center justify-center gap-4 text-3xl"
+              className="w-full h-18 py-5 mt-6 bg-gradient-to-r from-brand-600 to-brand-500 text-white rounded-[2rem] font-bold shadow-xl shadow-brand-200 hover:scale-[1.01] active:scale-[0.98] transition-all disabled:opacity-70 flex items-center justify-center gap-3 text-2xl"
             >
-              {isTesting ? <Loader2 size={40} className="animate-spin" /> : <span className="flex items-center gap-3">确认连接 <ChevronRight size={36} /></span>}
+              {isTesting ? <Loader2 size={32} className="animate-spin" /> : <span className="flex items-center gap-2">确认连接 <ChevronRight size={28} /></span>}
             </button>
             
           </form>
@@ -139,36 +139,36 @@ const LoginScreen = ({ onLogin, onResetConfig }: { onLogin: (user: UserType) => 
 
       <button 
         onClick={() => { if(confirm('确定要清除数据库配置吗？')) onResetConfig(); }}
-        className="absolute top-8 right-8 p-6 text-gray-400 hover:text-gray-600 active:scale-95 transition-transform z-10"
+        className="absolute top-8 right-8 p-4 text-gray-400 hover:text-gray-600 active:scale-95 transition-transform z-10"
       >
-        <Settings size={36} />
+        <Settings size={28} />
       </button>
 
-      <div className="w-32 h-32 bg-brand-500 rounded-[2.5rem] flex items-center justify-center shadow-2xl shadow-brand-200 mb-12 rotate-3 z-10">
-        <Sparkles size={64} className="text-white" />
+      <div className="w-24 h-24 bg-brand-500 rounded-[2rem] flex items-center justify-center shadow-2xl shadow-brand-200 mb-10 rotate-3 z-10">
+        <Sparkles size={48} className="text-white" />
       </div>
-      <h1 className="text-6xl font-extrabold text-gray-800 mb-6 z-10 tracking-tight">夫妻账本</h1>
-      <p className="text-gray-500 mb-20 text-3xl z-10 font-medium">请选择您的身份</p>
+      <h1 className="text-5xl font-extrabold text-gray-800 mb-4 z-10 tracking-tight">夫妻账本</h1>
+      <p className="text-gray-500 mb-16 text-2xl z-10 font-medium">请选择您的身份</p>
       
-      <div className="space-y-10 w-full max-w-sm z-10">
+      <div className="space-y-6 w-full max-w-xs z-10">
         <button 
           onClick={() => onLogin('husband')}
-          className="w-full py-8 bg-white hover:bg-blue-50 border-4 border-white hover:border-blue-100 text-gray-800 rounded-[3rem] shadow-xl flex items-center justify-center gap-6 transition-all active:scale-[0.98]"
+          className="w-full py-6 bg-white hover:bg-blue-50 border-4 border-white hover:border-blue-100 text-gray-800 rounded-[2.5rem] shadow-xl flex items-center justify-center gap-5 transition-all active:scale-[0.98]"
         >
-          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-            <UserIcon size={40} />
+          <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+            <UserIcon size={32} />
           </div>
-          <span className="font-bold text-3xl">我是丈夫</span>
+          <span className="font-bold text-2xl">我是丈夫</span>
         </button>
         
         <button 
           onClick={() => onLogin('wife')}
-          className="w-full py-8 bg-white hover:bg-pink-50 border-4 border-white hover:border-pink-100 text-gray-800 rounded-[3rem] shadow-xl flex items-center justify-center gap-6 transition-all active:scale-[0.98]"
+          className="w-full py-6 bg-white hover:bg-pink-50 border-4 border-white hover:border-pink-100 text-gray-800 rounded-[2.5rem] shadow-xl flex items-center justify-center gap-5 transition-all active:scale-[0.98]"
         >
-          <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center text-pink-600">
-            <UserIcon size={40} />
+          <div className="w-14 h-14 bg-pink-100 rounded-full flex items-center justify-center text-pink-600">
+            <UserIcon size={32} />
           </div>
-          <span className="font-bold text-3xl">我是妻子</span>
+          <span className="font-bold text-2xl">我是妻子</span>
         </button>
       </div>
     </div>
@@ -208,39 +208,39 @@ const Dashboard = ({
   const hasMore = visibleCount < transactions.length;
 
   return (
-    <div className="p-6 space-y-8">
+    <div className="p-5 space-y-6">
       <header className="flex justify-between items-center pt-6">
         <div>
-           <h1 className="text-5xl font-extrabold text-gray-900 tracking-tight">夫妻账本</h1>
-           <p className="text-xl text-gray-500 mt-2 font-medium">
-             当前: <span className="font-bold text-brand-600 bg-brand-50 px-4 py-1.5 rounded-2xl text-xl ml-2">{currentUser === 'husband' ? '丈夫' : '妻子'}</span>
+           <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">夫妻账本</h1>
+           <p className="text-lg text-gray-500 mt-1 font-medium">
+             当前: <span className="font-bold text-brand-600 bg-brand-50 px-3 py-1 rounded-xl text-lg ml-2">{currentUser === 'husband' ? '丈夫' : '妻子'}</span>
            </p>
         </div>
-        <button onClick={onChangeUser} className="p-5 bg-white rounded-3xl shadow-sm border border-gray-100 text-gray-400 hover:text-brand-600 active:scale-95 transition-all">
-          <LogOut size={32} />
+        <button onClick={onChangeUser} className="p-4 bg-white rounded-2xl shadow-sm border border-gray-100 text-gray-400 hover:text-brand-600 active:scale-95 transition-all">
+          <LogOut size={24} />
         </button>
       </header>
 
       {/* Overview Card */}
-      <div className="bg-gradient-to-br from-brand-900 to-brand-600 rounded-[3.5rem] p-10 text-white shadow-xl shadow-brand-200/50 relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-110 transition-transform duration-700"></div>
+      <div className="bg-gradient-to-br from-brand-900 to-brand-600 rounded-[2.5rem] p-8 text-white shadow-xl shadow-brand-200/50 relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-12 -mt-12 group-hover:scale-110 transition-transform duration-700"></div>
         
         <div className="relative z-10">
-          <div className="text-brand-100 text-xl font-bold mb-4">本月结余</div>
-          <div className="text-8xl font-extrabold mb-12 tracking-tight leading-none">
-            {isLoading ? '...' : <><span className="text-5xl align-top opacity-80 mr-2">¥</span>{monthBalance.toFixed(0)}</>}
+          <div className="text-brand-100 text-lg font-bold mb-2">本月结余</div>
+          <div className="text-6xl font-extrabold mb-8 tracking-tight leading-none">
+            {isLoading ? '...' : <><span className="text-4xl align-top opacity-80 mr-1">¥</span>{monthBalance.toFixed(0)}</>}
           </div>
           
-          <div className="flex gap-6">
-            <div className="flex-1 bg-white/10 rounded-[2rem] p-6 backdrop-blur-sm border border-white/10">
-              <div className="text-brand-100 text-base font-bold mb-1">本月收入</div>
-              <div className="font-bold text-3xl text-emerald-300">
+          <div className="flex gap-4">
+            <div className="flex-1 bg-white/10 rounded-[1.5rem] p-5 backdrop-blur-sm border border-white/10">
+              <div className="text-brand-100 text-sm font-bold mb-1">本月收入</div>
+              <div className="font-bold text-2xl text-emerald-300">
                 {isLoading ? '...' : `+${monthIncome.toFixed(0)}`}
               </div>
             </div>
-            <div className="flex-1 bg-white/10 rounded-[2rem] p-6 backdrop-blur-sm border border-white/10">
-              <div className="text-brand-100 text-base font-bold mb-1">本月支出</div>
-              <div className="font-bold text-3xl text-rose-300">
+            <div className="flex-1 bg-white/10 rounded-[1.5rem] p-5 backdrop-blur-sm border border-white/10">
+              <div className="text-brand-100 text-sm font-bold mb-1">本月支出</div>
+              <div className="font-bold text-2xl text-rose-300">
                 {isLoading ? '...' : `-${monthExpense.toFixed(0)}`}
               </div>
             </div>
@@ -249,9 +249,9 @@ const Dashboard = ({
       </div>
 
       <div>
-        <h2 className="text-3xl font-bold text-gray-800 mb-6 flex items-center gap-4">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-3">
           最近明细
-          {isLoading && <Loader2 size={32} className="animate-spin text-gray-400" />}
+          {isLoading && <Loader2 size={24} className="animate-spin text-gray-400" />}
         </h2>
         
         <TransactionList 
@@ -390,56 +390,55 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
   };
 
   return (
-    <div className="p-6 pb-40">
-      <h2 className="text-5xl font-bold text-gray-800 mb-10 pt-6">记一笔</h2>
+    <div className="p-5 pb-32">
+      <h2 className="text-4xl font-bold text-gray-800 mb-8 pt-4">记一笔</h2>
 
       {/* 
-         Fixed AI Input:
-         1. Added `overflow-hidden` to outer card.
-         2. AI Input Wrapper: Added `p-6` for larger touch area.
-         3. Input field: Added `min-w-0` to allow shrinking on small screens (iOS).
-         4. Buttons: Added `flex-shrink-0` to prevent them from being squashed.
+         FIXED AI INPUT for Cross-Platform:
+         - Added `min-w-0` to input so it shrinks on iOS.
+         - Added `shrink-0` to buttons so they don't squash.
+         - Height h-16 (64px) is plenty big for Android but safe for iOS.
       */}
-      <div className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-brand-100 mb-12 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-4 h-full bg-brand-500"></div>
-        <label className="text-xl font-bold text-brand-600 uppercase tracking-wider mb-4 block flex items-center gap-3 pl-2">
-          <Sparkles size={28} /> AI 智能记账
+      <div className="bg-white p-5 rounded-[2rem] shadow-sm border border-brand-100 mb-10 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-3 h-full bg-brand-500"></div>
+        <label className="text-lg font-bold text-brand-600 uppercase tracking-wider mb-3 block flex items-center gap-2 pl-2">
+          <Sparkles size={24} /> AI 智能记账
         </label>
         
-        <div className="flex gap-3 items-center pl-1">
+        <div className="flex gap-2 items-center pl-1 w-full">
           <input
             type="text"
             value={smartInput}
             onChange={(e) => setSmartInput(e.target.value)}
             placeholder="买菜200"
-            className="flex-1 min-w-0 bg-gray-50 border-none rounded-3xl text-3xl px-6 h-20 focus:ring-4 focus:ring-brand-200"
+            className="flex-1 min-w-0 bg-gray-50 border-none rounded-2xl text-2xl px-4 h-16 focus:ring-4 focus:ring-brand-200"
           />
           <button 
             type="button"
             onClick={toggleListening}
-            className={`flex-shrink-0 w-20 h-20 flex items-center justify-center rounded-3xl transition-colors ${isRecording ? 'bg-red-500 text-white animate-pulse' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+            className={`flex-shrink-0 w-16 h-16 flex items-center justify-center rounded-2xl transition-colors ${isRecording ? 'bg-red-500 text-white animate-pulse' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
           >
-            <Mic size={36} />
+            <Mic size={30} />
           </button>
           <button 
             type="button"
             onClick={handleSmartParse}
             disabled={isAnalyzing || !smartInput}
-            className="flex-shrink-0 w-20 h-20 flex items-center justify-center bg-brand-600 text-white rounded-3xl hover:bg-brand-700 disabled:opacity-50"
+            className="flex-shrink-0 w-16 h-16 flex items-center justify-center bg-brand-600 text-white rounded-2xl hover:bg-brand-700 disabled:opacity-50"
           >
-            {isAnalyzing ? <Loader2 size={36} className="animate-spin" /> : <Send size={36} />}
+            {isAnalyzing ? <Loader2 size={30} className="animate-spin" /> : <Send size={30} />}
           </button>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-10">
-        <div className="flex items-center gap-6 bg-gray-50 p-6 rounded-[2.5rem] border border-dashed border-gray-200">
-           <span className="text-2xl text-gray-500 font-bold shrink-0">记账人:</span>
-           <div className="flex gap-5 flex-1">
+      <form onSubmit={handleSubmit} className="space-y-8">
+        <div className="flex items-center gap-4 bg-gray-50 p-4 rounded-[2rem] border border-dashed border-gray-200">
+           <span className="text-xl text-gray-500 font-bold shrink-0">记账人:</span>
+           <div className="flex gap-4 flex-1">
              <button
                type="button"
                onClick={() => setActiveUser('husband')}
-               className={`flex-1 py-6 rounded-3xl text-2xl font-bold transition-colors ${
+               className={`flex-1 py-4 rounded-2xl text-xl font-bold transition-colors ${
                  activeUser === 'husband' ? 'bg-blue-100 text-blue-700' : 'bg-gray-200 text-gray-500'
                }`}
              >
@@ -448,7 +447,7 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
              <button
                type="button"
                onClick={() => setActiveUser('wife')}
-               className={`flex-1 py-6 rounded-3xl text-2xl font-bold transition-colors ${
+               className={`flex-1 py-4 rounded-2xl text-xl font-bold transition-colors ${
                  activeUser === 'wife' ? 'bg-pink-100 text-pink-700' : 'bg-gray-200 text-gray-500'
                }`}
              >
@@ -457,11 +456,11 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
            </div>
         </div>
 
-        <div className="flex gap-6">
+        <div className="flex gap-4">
             <button
               type="button"
               onClick={() => { setType('expense'); setCategory(CATEGORIES.expense[0]); }}
-              className={`flex-1 py-8 border-4 rounded-[2.5rem] font-bold text-3xl transition-all ${
+              className={`flex-1 py-6 border-4 rounded-[2rem] font-bold text-2xl transition-all ${
                 type === 'expense' ? 'border-accent-500 bg-accent-50 text-accent-600' : 'border-gray-200 text-gray-400'
               }`}
             >
@@ -470,7 +469,7 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
             <button
               type="button"
               onClick={() => { setType('income'); setCategory(CATEGORIES.income[0]); }}
-              className={`flex-1 py-8 border-4 rounded-[2.5rem] font-bold text-3xl transition-all ${
+              className={`flex-1 py-6 border-4 rounded-[2rem] font-bold text-2xl transition-all ${
                 type === 'income' ? 'border-emerald-500 bg-emerald-50 text-emerald-600' : 'border-gray-200 text-gray-400'
               }`}
             >
@@ -479,28 +478,28 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
         </div>
 
         <div>
-          <label className="block text-2xl font-bold text-gray-500 mb-4 ml-3">金额</label>
+          <label className="block text-xl font-bold text-gray-500 mb-3 ml-2">金额</label>
           <div className="relative">
-            <span className="absolute left-10 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-6xl">¥</span>
+            <span className="absolute left-8 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-5xl">¥</span>
             <input
               type="number"
               inputMode="decimal"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="w-full pl-20 pr-10 py-12 text-8xl font-extrabold text-gray-800 bg-gray-50 rounded-[3rem] border-none focus:ring-4 focus:ring-brand-500/20 outline-none placeholder-gray-200 tracking-tight"
+              className="w-full pl-16 pr-8 py-8 text-7xl font-extrabold text-gray-800 bg-gray-50 rounded-[2.5rem] border-none focus:ring-4 focus:ring-brand-500/20 outline-none placeholder-gray-200 tracking-tight"
               placeholder="0"
               required
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-2xl font-bold text-gray-500 mb-4 ml-3 flex items-center gap-2"><Tag size={24}/> 分类</label>
+            <label className="block text-xl font-bold text-gray-500 mb-3 ml-2 flex items-center gap-2"><Tag size={20}/> 分类</label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-6 bg-white border border-gray-200 rounded-[2rem] text-3xl font-bold text-gray-800 focus:ring-4 focus:ring-brand-500 appearance-none shadow-sm h-24"
+              className="w-full px-5 bg-white border border-gray-200 rounded-[1.5rem] text-xl font-bold text-gray-800 focus:ring-4 focus:ring-brand-500 appearance-none shadow-sm h-16"
             >
               {(type === 'expense' ? CATEGORIES.expense : CATEGORIES.income).map(c => (
                 <option key={c} value={c}>{c}</option>
@@ -508,33 +507,33 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
             </select>
           </div>
           <div>
-            <label className="block text-2xl font-bold text-gray-500 mb-4 ml-3 flex items-center gap-2"><Calendar size={24}/> 日期</label>
+            <label className="block text-xl font-bold text-gray-500 mb-3 ml-2 flex items-center gap-2"><Calendar size={20}/> 日期</label>
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full px-6 bg-white border border-gray-200 rounded-[2rem] text-3xl font-bold text-gray-800 focus:ring-4 focus:ring-brand-500 shadow-sm h-24"
+              className="w-full px-5 bg-white border border-gray-200 rounded-[1.5rem] text-xl font-bold text-gray-800 focus:ring-4 focus:ring-brand-500 shadow-sm h-16"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-2xl font-bold text-gray-500 mb-4 ml-3 flex items-center gap-2"><FileText size={24}/> 备注 (选填)</label>
+          <label className="block text-xl font-bold text-gray-500 mb-3 ml-2 flex items-center gap-2"><FileText size={20}/> 备注 (选填)</label>
           <input
             type="text"
             value={note}
             onChange={(e) => setNote(e.target.value)}
             placeholder="这笔钱是干嘛的？"
-            className="w-full px-6 bg-white border border-gray-200 rounded-[2rem] text-3xl text-gray-800 focus:ring-4 focus:ring-brand-500 shadow-sm placeholder-gray-400 h-24"
+            className="w-full px-5 bg-white border border-gray-200 rounded-[1.5rem] text-xl text-gray-800 focus:ring-4 focus:ring-brand-500 shadow-sm placeholder-gray-400 h-16"
           />
         </div>
 
         <button
           type="submit"
           disabled={isSaving}
-          className="w-full py-8 bg-gray-900 text-white rounded-[3rem] font-bold text-3xl shadow-lg shadow-gray-400/40 hover:bg-black active:scale-[0.98] transition-all disabled:opacity-70 flex items-center justify-center gap-4 mt-12"
+          className="w-full py-6 bg-gray-900 text-white rounded-[2.5rem] font-bold text-2xl shadow-lg shadow-gray-400/40 hover:bg-black active:scale-[0.98] transition-all disabled:opacity-70 flex items-center justify-center gap-3 mt-8"
         >
-          {isSaving && <Loader2 size={40} className="animate-spin" />}
+          {isSaving && <Loader2 size={32} className="animate-spin" />}
           {isSaving ? '保存中...' : '保存记录'}
         </button>
       </form>
@@ -597,34 +596,34 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
   const COLORS = ['#f43f5e', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#6366f1'];
   
   return (
-    <div className="p-6 space-y-10 pb-40">
+    <div className="p-5 space-y-8 pb-32">
       <header className="flex justify-between items-center pt-6">
-         <h2 className="text-5xl font-bold text-gray-800">统计报表</h2>
-         <div className="flex bg-gray-100 p-2 rounded-3xl">
+         <h2 className="text-4xl font-bold text-gray-800">统计报表</h2>
+         <div className="flex bg-gray-100 p-1.5 rounded-2xl">
             <button 
               onClick={() => setTimeFilter('month')}
-              className={`px-6 py-4 text-2xl font-bold rounded-2xl transition-all ${timeFilter === 'month' ? 'bg-white shadow text-brand-600' : 'text-gray-500'}`}
+              className={`px-5 py-3 text-xl font-bold rounded-xl transition-all ${timeFilter === 'month' ? 'bg-white shadow text-brand-600' : 'text-gray-500'}`}
             >
               月度
             </button>
             <button 
               onClick={() => setTimeFilter('year')}
-              className={`px-6 py-4 text-2xl font-bold rounded-2xl transition-all ${timeFilter === 'year' ? 'bg-white shadow text-brand-600' : 'text-gray-500'}`}
+              className={`px-5 py-3 text-xl font-bold rounded-xl transition-all ${timeFilter === 'year' ? 'bg-white shadow text-brand-600' : 'text-gray-500'}`}
             >
               年度
             </button>
          </div>
       </header>
 
-      <div className="flex items-center justify-between bg-white p-6 rounded-[2.5rem] border border-gray-100 shadow-sm">
+      <div className="flex items-center justify-between bg-white p-5 rounded-[2rem] border border-gray-100 shadow-sm">
          <button onClick={() => {
             const newDate = new Date(selectedDate);
             if(timeFilter === 'month') newDate.setMonth(newDate.getMonth() - 1);
             else newDate.setFullYear(newDate.getFullYear() - 1);
             setSelectedDate(newDate);
-         }} className="p-5 text-gray-400 hover:text-gray-600 active:scale-90 transition-transform bg-gray-50 rounded-2xl">{'<'}</button>
+         }} className="p-4 text-gray-400 hover:text-gray-600 active:scale-90 transition-transform bg-gray-50 rounded-xl">{'<'}</button>
          
-         <div className="font-bold text-3xl text-gray-800">
+         <div className="font-bold text-2xl text-gray-800">
            {selectedDate.getFullYear()}年
            {timeFilter === 'month' && ` ${selectedDate.getMonth() + 1}月`}
          </div>
@@ -634,34 +633,34 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
             if(timeFilter === 'month') newDate.setMonth(newDate.getMonth() + 1);
             else newDate.setFullYear(newDate.getFullYear() + 1);
             setSelectedDate(newDate);
-         }} className="p-5 text-gray-400 hover:text-gray-600 active:scale-90 transition-transform bg-gray-50 rounded-2xl">{'>'}</button>
+         }} className="p-4 text-gray-400 hover:text-gray-600 active:scale-90 transition-transform bg-gray-50 rounded-xl">{'>'}</button>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
-         <div className="bg-emerald-50 p-8 rounded-[2.5rem] border border-emerald-100">
-            <div className="text-xl text-emerald-600 mb-3 font-bold">总收入</div>
-            <div className="text-4xl font-extrabold text-emerald-700">+{totalIncome.toFixed(0)}</div>
+      <div className="grid grid-cols-2 gap-4">
+         <div className="bg-emerald-50 p-6 rounded-[2rem] border border-emerald-100">
+            <div className="text-lg text-emerald-600 mb-2 font-bold">总收入</div>
+            <div className="text-3xl font-extrabold text-emerald-700">+{totalIncome.toFixed(0)}</div>
          </div>
-         <div className="bg-rose-50 p-8 rounded-[2.5rem] border border-rose-100">
-            <div className="text-xl text-rose-600 mb-3 font-bold">总支出</div>
-            <div className="text-4xl font-extrabold text-rose-700">-{totalExpense.toFixed(0)}</div>
+         <div className="bg-rose-50 p-6 rounded-[2rem] border border-rose-100">
+            <div className="text-lg text-rose-600 mb-2 font-bold">总支出</div>
+            <div className="text-3xl font-extrabold text-rose-700">-{totalExpense.toFixed(0)}</div>
          </div>
       </div>
 
       {timeFilter === 'year' && (
-        <div className="bg-white p-8 rounded-[3rem] shadow-sm border border-gray-100">
-          <h3 className="text-2xl font-bold text-gray-500 uppercase tracking-wider mb-8">存钱趋势 (月度结余)</h3>
-          <div className="h-64 w-full">
+        <div className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-100">
+          <h3 className="text-xl font-bold text-gray-500 uppercase tracking-wider mb-6">存钱趋势 (月度结余)</h3>
+          <div className="h-60 w-full">
              <ResponsiveContainer width="100%" height="100%">
                <LineChart data={annualTrendData} margin={{ left: 0, right: 10, top: 10, bottom: 0 }}>
                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
-                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 16, fill: '#9ca3af', dy: 10}} />
+                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 14, fill: '#9ca3af', dy: 10}} />
                  <ReferenceLine y={0} stroke="#9ca3af" strokeDasharray="3 3" />
                  <RechartsTooltip 
                    formatter={(value: number) => `¥${value.toFixed(0)}`}
-                   contentStyle={{ borderRadius: '20px', border: 'none', boxShadow: '0 5px 20px -3px rgba(0, 0, 0, 0.15)', fontSize: '20px', padding: '16px' }}
+                   contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 5px 20px -3px rgba(0, 0, 0, 0.15)', fontSize: '18px', padding: '12px' }}
                  />
-                 <Line type="monotone" dataKey="balance" name="结余" stroke="#14b8a6" strokeWidth={5} dot={{ r: 6, fill: '#14b8a6', strokeWidth: 3, stroke: '#fff' }} />
+                 <Line type="monotone" dataKey="balance" name="结余" stroke="#14b8a6" strokeWidth={4} dot={{ r: 5, fill: '#14b8a6', strokeWidth: 2, stroke: '#fff' }} />
                </LineChart>
              </ResponsiveContainer>
           </div>
@@ -670,56 +669,56 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
 
       {(expenseData.length > 0 || totalIncome > 0) ? (
         <>
-          <div className="bg-white p-8 rounded-[3rem] shadow-sm border border-gray-100">
-            <h3 className="text-2xl font-bold text-gray-500 uppercase tracking-wider mb-8">收支对比</h3>
-            <div className="h-64 w-full">
+          <div className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-100">
+            <h3 className="text-xl font-bold text-gray-500 uppercase tracking-wider mb-6">收支对比</h3>
+            <div className="h-60 w-full">
                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart layout="vertical" data={userStatsData} barGap={12} margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
+                  <BarChart layout="vertical" data={userStatsData} barGap={8} margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
                     <XAxis type="number" hide />
-                    <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={60} style={{fontSize: '20px', fontWeight: 'bold'}} />
-                    <RechartsTooltip formatter={(value: number) => `¥${value.toFixed(0)}`} cursor={{fill: 'transparent'}} contentStyle={{ borderRadius: '20px', border: 'none', boxShadow: '0 5px 20px -3px rgba(0, 0, 0, 0.15)', fontSize: '20px', padding: '16px' }} />
-                    <Legend verticalAlign="top" align="right" iconType="circle" height={50} wrapperStyle={{ fontSize: '18px', fontWeight: 'bold' }}/>
-                    <Bar dataKey="income" name="收入" fill="#10b981" radius={[0, 10, 10, 0]} barSize={32} />
-                    <Bar dataKey="expense" name="支出" fill="#f43f5e" radius={[0, 10, 10, 0]} barSize={32} />
+                    <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={50} style={{fontSize: '18px', fontWeight: 'bold'}} />
+                    <RechartsTooltip formatter={(value: number) => `¥${value.toFixed(0)}`} cursor={{fill: 'transparent'}} contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 5px 20px -3px rgba(0, 0, 0, 0.15)', fontSize: '18px', padding: '12px' }} />
+                    <Legend verticalAlign="top" align="right" iconType="circle" height={40} wrapperStyle={{ fontSize: '16px', fontWeight: 'bold' }}/>
+                    <Bar dataKey="income" name="收入" fill="#10b981" radius={[0, 8, 8, 0]} barSize={24} />
+                    <Bar dataKey="expense" name="支出" fill="#f43f5e" radius={[0, 8, 8, 0]} barSize={24} />
                   </BarChart>
                </ResponsiveContainer>
             </div>
           </div>
 
-          <div className="bg-white p-8 rounded-[3rem] shadow-sm border border-gray-100">
-            <h3 className="text-2xl font-bold text-gray-500 uppercase tracking-wider mb-8">支出分类占比</h3>
-            <div className="h-80 w-full">
+          <div className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-100">
+            <h3 className="text-xl font-bold text-gray-500 uppercase tracking-wider mb-6">支出分类占比</h3>
+            <div className="h-72 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
                       data={expenseData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={70}
-                      outerRadius={120}
-                      paddingAngle={4}
+                      innerRadius={60}
+                      outerRadius={100}
+                      paddingAngle={3}
                       dataKey="value"
                     >
                       {expenseData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
-                    <RechartsTooltip formatter={(value: number) => `¥${value.toFixed(0)}`} contentStyle={{ borderRadius: '20px', border: 'none', boxShadow: '0 5px 20px -3px rgba(0, 0, 0, 0.15)', fontSize: '20px', padding: '16px' }}/>
-                    <Legend verticalAlign="bottom" height={50} iconType="circle" wrapperStyle={{ fontSize: '18px', fontWeight: 'bold', paddingTop: '20px' }} />
+                    <RechartsTooltip formatter={(value: number) => `¥${value.toFixed(0)}`} contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 5px 20px -3px rgba(0, 0, 0, 0.15)', fontSize: '18px', padding: '12px' }}/>
+                    <Legend verticalAlign="bottom" height={40} iconType="circle" wrapperStyle={{ fontSize: '16px', fontWeight: 'bold', paddingTop: '10px' }} />
                   </PieChart>
                 </ResponsiveContainer>
             </div>
           </div>
 
-          <div className="bg-white p-8 rounded-[3rem] shadow-sm border border-gray-100">
-            <h3 className="text-2xl font-bold text-gray-500 uppercase tracking-wider mb-10">支出排行榜</h3>
-            <div className="space-y-8">
+          <div className="bg-white p-6 rounded-[2.5rem] shadow-sm border border-gray-100">
+            <h3 className="text-xl font-bold text-gray-500 uppercase tracking-wider mb-8">支出排行榜</h3>
+            <div className="space-y-6">
               {expenseData.map((item, index) => {
                 const percent = totalExpense > 0 ? (item.value / totalExpense * 100).toFixed(1) : '0.0';
                 return (
                   <div key={item.name} className="flex items-center justify-between">
-                    <div className="flex items-center gap-6">
-                      <div className={`w-14 h-14 rounded-3xl flex items-center justify-center text-2xl font-bold shrink-0 ${
+                    <div className="flex items-center gap-4">
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-xl font-bold shrink-0 ${
                         index === 0 ? 'bg-yellow-100 text-yellow-600' :
                         index === 1 ? 'bg-gray-200 text-gray-600' :
                         index === 2 ? 'bg-orange-100 text-orange-600' :
@@ -728,15 +727,15 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
                         {index + 1}
                       </div>
                       <div>
-                        <div className="text-3xl font-bold text-gray-800">{item.name}</div>
-                        <div className="w-36 bg-gray-100 h-3 rounded-full mt-3 overflow-hidden">
+                        <div className="text-2xl font-bold text-gray-800">{item.name}</div>
+                        <div className="w-28 bg-gray-100 h-2.5 rounded-full mt-2 overflow-hidden">
                            <div className="bg-brand-500 h-full rounded-full" style={{ width: `${percent}%` }}></div>
                         </div>
                       </div>
                     </div>
                     <div className="text-right">
-                       <div className="text-3xl font-bold text-gray-900">¥{item.value.toFixed(0)}</div>
-                       <div className="text-xl text-gray-400 mt-1.5">{percent}%</div>
+                       <div className="text-2xl font-bold text-gray-900">¥{item.value.toFixed(0)}</div>
+                       <div className="text-lg text-gray-400 mt-1">{percent}%</div>
                     </div>
                   </div>
                 );
@@ -745,7 +744,7 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
           </div>
         </>
       ) : (
-        <div className="text-center py-24 text-gray-300 text-2xl font-medium">该时间段暂无数据</div>
+        <div className="text-center py-20 text-gray-300 text-xl font-medium">该时间段暂无数据</div>
       )}
     </div>
   );
