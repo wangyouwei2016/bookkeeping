@@ -1,28 +1,34 @@
-import { GoogleGenAI, Type } from "@google/genai";
 import { CATEGORIES, GeminiParseResult } from "../types";
 
-// Helper to reliably get the API Key in Vite environment
-const getApiKey = () => {
-  // 1. Try Vite env (Standard for this project)
-  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_KEY) {
-    return import.meta.env.VITE_API_KEY;
-  }
-  // 2. Try Node/Process env (Fallback)
-  if (typeof process !== 'undefined' && process.env && process.env.API_KEY) {
-    return process.env.API_KEY;
-  }
-  return '';
-};
+// Helper to call our Vercel Serverless Proxy
+// This solves the issue where client-side requests are blocked by GFW or CORS
+const callProxy = async (contents: any, config?: any) => {
+  const response = await fetch('/api/proxy', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ 
+      contents, 
+      config,
+      model: "gemini-2.5-flash"
+    })
+  });
 
-// Initialize AI with the resolved key
-const apiKey = getApiKey();
-const ai = new GoogleGenAI({ apiKey });
+  if (!response.ok) {
+    const errText = await response.text();
+    // Try to parse JSON error if possible
+    try {
+        const jsonErr = JSON.parse(errText);
+        throw new Error(jsonErr.error?.message || jsonErr.error || 'Unknown Proxy Error');
+    } catch (e) {
+        throw new Error(`Proxy Error (${response.status}): ${errText}`);
+    }
+  }
+
+  return await response.json();
+};
 
 const parseTransactionWithGemini = async (input: string): Promise<GeminiParseResult | null> => {
   try {
-    if (!apiKey) throw new Error("API Key is missing. Please check VITE_API_KEY configuration.");
-
-    // Construct the context for the AI
     const expenseCats = CATEGORIES.expense.join(", ");
     const incomeCats = CATEGORIES.income.join(", ");
     const today = new Date().toISOString().split('T')[0];
@@ -43,27 +49,31 @@ const parseTransactionWithGemini = async (input: string): Promise<GeminiParseRes
       5. 从剩余文本中生成简短的中文备注（去掉金额和日期词汇）。
     `;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            amount: { type: Type.NUMBER },
-            category: { type: Type.STRING },
-            type: { type: Type.STRING, enum: ["expense", "income"] },
-            date: { type: Type.STRING, description: "YYYY-MM-DD format" },
-            note: { type: Type.STRING }
-          },
-          required: ["amount", "type"]
-        }
-      }
-    });
+    // Manual Schema Definition (to avoid importing SDK types on client)
+    const schema = {
+      type: "OBJECT",
+      properties: {
+        amount: { type: "NUMBER" },
+        category: { type: "STRING" },
+        type: { type: "STRING", enum: ["expense", "income"] },
+        date: { type: "STRING", description: "YYYY-MM-DD format" },
+        note: { type: "STRING" }
+      },
+      required: ["amount", "type"]
+    };
 
-    if (response.text) {
-      return JSON.parse(response.text) as GeminiParseResult;
+    const data = await callProxy(
+      { parts: [{ text: prompt }] },
+      {
+        responseMimeType: "application/json",
+        responseSchema: schema
+      }
+    );
+    
+    // Extract text from REST API response structure
+    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (text) {
+      return JSON.parse(text) as GeminiParseResult;
     }
     return null;
 
@@ -75,13 +85,10 @@ const parseTransactionWithGemini = async (input: string): Promise<GeminiParseRes
 
 const transcribeAudioWithGemini = async (audioBase64: string, mimeType: string): Promise<string | null> => {
   try {
-    if (!apiKey) throw new Error("API Key is missing. Please check VITE_API_KEY configuration.");
+    console.log(`Sending audio to Proxy... (${mimeType})`);
 
-    console.log(`Sending audio to Gemini... Format: ${mimeType}, Length: ${audioBase64.length}`);
-
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: {
+    const data = await callProxy(
+      {
         parts: [
           {
             inlineData: {
@@ -94,15 +101,13 @@ const transcribeAudioWithGemini = async (audioBase64: string, mimeType: string):
           }
         ]
       }
-    });
+    );
 
-    console.log("Gemini Response:", response.text);
-    return response.text || null;
+    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    console.log("Gemini STT Response:", text);
+    return text || null;
   } catch (error) {
     console.error("Gemini STT Error:", error);
-    // Return the error message string if possible to alert the user, 
-    // but the signature returns string | null. We'll rely on null for failure for now 
-    // or log it to console which is handled.
     return null;
   }
 };
