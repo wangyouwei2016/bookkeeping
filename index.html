@@ -6,7 +6,7 @@
     <title>夫妻账本</title>
     <!-- PWA Setup -->
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#14b8a6">
+    <meta name="theme-color" content="#f9fafb">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="/icon-192.png">
@@ -25,6 +25,19 @@
   }
 }
 </script>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: #f9fafb;
+        /* Prevent bounce effect on iOS to make it feel more native */
+        overscroll-behavior-y: none;
+      }
+      #root {
+        height: 100%;
+      }
+    </style>
 </head>
   <body>
     <div id="root"></div>

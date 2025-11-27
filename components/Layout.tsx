@@ -9,14 +9,20 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange }) => {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50 w-full sm:max-w-md sm:mx-auto sm:shadow-2xl sm:overflow-hidden relative">
-      {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto no-scrollbar pb-28">
-        {children}
+    // Mobile: Full screen (h-dvh), full width, no rounded corners.
+    // Desktop (md+): Centered "Phone" card styling with borders and shadow.
+    <div className="flex flex-col h-[100dvh] w-full bg-gray-50 relative md:h-[85vh] md:max-w-md md:mx-auto md:my-[5vh] md:rounded-[2.5rem] md:shadow-2xl md:overflow-hidden md:border-[8px] md:border-gray-900 box-border">
+      
+      {/* Main Content Area - Internal scrolling */}
+      <main className="flex-1 overflow-y-auto no-scrollbar w-full">
+        {/* Padding bottom ensures content isn't covered by the absolute nav bar */}
+        <div className="pb-28 min-h-full">
+            {children}
+        </div>
       </main>
 
-      {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 mx-auto w-full sm:max-w-md bg-white border-t border-gray-100 flex justify-around items-center pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+      {/* Bottom Navigation - Absolute to stick to bottom of container */}
+      <nav className="absolute bottom-0 left-0 right-0 w-full bg-white/95 backdrop-blur-sm border-t border-gray-100 flex justify-around items-center pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
         <button
           onClick={() => onTabChange('home')}
           className={`flex flex-col items-center gap-1 transition-colors ${
@@ -29,7 +35,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange }) => 
 
         <button
           onClick={() => onTabChange('add')}
-          className="flex flex-col items-center -mt-8"
+          className="flex flex-col items-center -mt-8 relative z-10"
         >
           <div className={`rounded-full p-4 shadow-lg transition-transform active:scale-95 ${
             activeTab === 'add' ? 'bg-brand-600 ring-4 ring-brand-100' : 'bg-brand-500 hover:bg-brand-600'
