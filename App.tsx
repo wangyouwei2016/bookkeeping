@@ -6,7 +6,7 @@ import { parseTransactionWithGemini } from './services/geminiService';
 import { getSupabase, saveSupabaseConfig, clearSupabaseConfig, testConnection, getStoredConfig, initSupabase } from './services/supabaseClient';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend, BarChart, Bar, XAxis, YAxis, LineChart, Line, CartesianGrid, ReferenceLine } from 'recharts';
-import { Mic, Send, Sparkles, Loader2, User as UserIcon, Calendar, Tag, FileText, LogOut, Database, Settings, AlertCircle, CloudCog } from 'lucide-react';
+import { Mic, Send, Sparkles, Loader2, User as UserIcon, Calendar, Tag, FileText, LogOut, Database, Settings, AlertCircle, CloudCog, Globe, Key } from 'lucide-react';
 
 // --- Components ---
 
@@ -58,20 +58,21 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-brand-50 to-brand-100 flex flex-col items-center justify-center p-8 text-center relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-brand-50 flex flex-col items-center justify-center p-8 text-center relative overflow-hidden">
        {/* Background decoration */}
-       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-40">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[30%] bg-blue-200 rounded-full blur-[100px]"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[30%] bg-pink-200 rounded-full blur-[100px]"></div>
+       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-30">
+        <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[40%] bg-blue-100 rounded-full blur-[120px]"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[40%] bg-teal-100 rounded-full blur-[120px]"></div>
       </div>
 
-      <div className="bg-white/80 backdrop-blur-xl p-10 rounded-[4rem] w-full max-w-2xl shadow-2xl border border-white z-10">
-        <div className="w-40 h-40 bg-brand-500 rounded-[3rem] flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-brand-200 rotate-3">
-          <CloudCog size={80} className="text-white" />
+      <div className="bg-white/90 backdrop-blur-2xl p-12 rounded-[4rem] w-full max-w-2xl shadow-2xl border border-white z-10 animate-in zoom-in-95 duration-500">
+        <div className="w-40 h-40 bg-gray-900 rounded-[3rem] flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-gray-300">
+          <Database size={80} className="text-white" />
         </div>
-        <h1 className="text-6xl font-bold text-gray-800 mb-6 tracking-tight">连接云端账本</h1>
-        <p className="text-gray-500 mb-12 text-3xl max-w-lg mx-auto leading-relaxed">
-          为了支持夫妻同步记账，<br/>我们需要连接 Supabase 数据库。
+        <h1 className="text-6xl font-extrabold text-gray-900 mb-6 tracking-tight">私有数据库连接配置</h1>
+        <p className="text-gray-500 mb-14 text-3xl max-w-lg mx-auto leading-relaxed font-medium">
+          可以使用您自己的数据库保证私密性<br/>
+          <span className="text-gray-400 text-2xl">请连接您的 Supabase 数据库</span>
         </p>
 
         {error && (
@@ -83,26 +84,36 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
 
         <form onSubmit={handleSave} className="space-y-10 text-left">
           <div>
-            <label className="block text-3xl font-bold text-gray-600 mb-4 pl-4">Project URL</label>
-            <input 
-              type="text" 
-              value={url}
-              onChange={e => setUrl(e.target.value)}
-              placeholder="https://xyz.supabase.co"
-              className="w-full p-8 bg-gray-50/50 border-2 border-gray-200 rounded-[3rem] text-3xl focus:ring-8 focus:ring-brand-500/20 focus:border-brand-500 outline-none font-mono shadow-inner transition-all placeholder-gray-300"
-              required
-            />
+            <label className="block text-3xl font-bold text-gray-700 mb-4 pl-4">Project URL</label>
+            <div className="relative group">
+              <div className="absolute left-8 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-600 transition-colors">
+                <Globe size={36} />
+              </div>
+              <input 
+                type="text" 
+                value={url}
+                onChange={e => setUrl(e.target.value)}
+                placeholder="https://xyz.supabase.co"
+                className="w-full pl-28 pr-8 py-10 bg-gray-50 border-2 border-gray-100 rounded-[3rem] text-3xl font-medium focus:bg-white focus:ring-8 focus:ring-brand-500/10 focus:border-brand-500 outline-none font-mono shadow-inner transition-all placeholder-gray-300"
+                required
+              />
+            </div>
           </div>
           <div>
-            <label className="block text-3xl font-bold text-gray-600 mb-4 pl-4">Anon Public Key</label>
-            <input 
-              type="password" 
-              value={key}
-              onChange={e => setKey(e.target.value)}
-              placeholder="eyJxh..."
-              className="w-full p-8 bg-gray-50/50 border-2 border-gray-200 rounded-[3rem] text-3xl focus:ring-8 focus:ring-brand-500/20 focus:border-brand-500 outline-none font-mono shadow-inner transition-all placeholder-gray-300"
-              required
-            />
+            <label className="block text-3xl font-bold text-gray-700 mb-4 pl-4">Anon Public Key</label>
+            <div className="relative group">
+              <div className="absolute left-8 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-600 transition-colors">
+                <Key size={36} />
+              </div>
+              <input 
+                type="password" 
+                value={key}
+                onChange={e => setKey(e.target.value)}
+                placeholder="eyJxh..."
+                className="w-full pl-28 pr-8 py-10 bg-gray-50 border-2 border-gray-100 rounded-[3rem] text-3xl font-medium focus:bg-white focus:ring-8 focus:ring-brand-500/10 focus:border-brand-500 outline-none font-mono shadow-inner transition-all placeholder-gray-300"
+                required
+              />
+            </div>
           </div>
           
           <button 
@@ -111,11 +122,11 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
             className="w-full py-10 bg-gray-900 text-white rounded-[3rem] font-bold shadow-xl shadow-gray-400/40 hover:bg-black transition-all mt-12 disabled:opacity-70 flex items-center justify-center gap-6 text-4xl active:scale-[0.98]"
           >
             {isTesting && <Loader2 size={48} className="animate-spin" />}
-            {isTesting ? '验证中...' : '立即连接'}
+            {isTesting ? '验证并连接' : '连接数据库'}
           </button>
           
           <div className="text-2xl text-gray-400 mt-12 text-center font-medium">
-             首次使用请先在 Supabase 创建表
+             首次使用请先在 Supabase 创建 transactions 表
           </div>
         </form>
       </div>
