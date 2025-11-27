@@ -3,11 +3,20 @@
 @tailwind utilities;
 
 /* Mobile optimizations to make it feel like a Native App */
-:root {
-  touch-action: manipulation;
-  /* 核心修复：禁止 iOS 自动调整字体大小，解决 iPhone 显示过大的问题 */
-  -webkit-text-size-adjust: 100%; 
+
+html {
+  /* 
+     核心修复：
+     1. 锁定根字体大小为 16px。
+        iOS PWA 模式会继承系统的“动态字体”设置，导致 rem 单位被放大。
+        因为我们已经设计了极大的字号，如果不锁定，会导致 iOS 上字体大到溢出。
+     2. 禁止 WebKit 自动调整文本大小。
+  */
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  
+  touch-action: manipulation;
 }
 
 body {
