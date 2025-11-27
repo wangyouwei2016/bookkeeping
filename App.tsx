@@ -60,42 +60,42 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6 text-center">
-      <div className="w-16 h-16 bg-gray-900 rounded-2xl flex items-center justify-center mb-6 shadow-xl">
-        <Database size={32} className="text-white" />
+      <div className="w-20 h-20 bg-gray-900 rounded-3xl flex items-center justify-center mb-8 shadow-xl">
+        <Database size={40} className="text-white" />
       </div>
-      <h1 className="text-2xl font-bold text-gray-800 mb-2">连接云端账本</h1>
-      <p className="text-gray-500 mb-8 text-sm max-w-xs">
+      <h1 className="text-3xl font-bold text-gray-800 mb-3">连接云端账本</h1>
+      <p className="text-gray-500 mb-10 text-base max-w-xs leading-relaxed">
         为了支持多人同步，请配置 Supabase 数据库。
         <br/>数据将安全存储在您自己的账号中。
       </p>
 
       {error && (
-        <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm mb-4 flex items-start gap-2 max-w-sm w-full text-left border border-red-100">
-          <AlertCircle size={16} className="shrink-0 mt-0.5" />
-          <span className="break-all">{error}</span>
+        <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm mb-6 flex items-start gap-3 max-w-sm w-full text-left border border-red-100">
+          <AlertCircle size={20} className="shrink-0 mt-0.5" />
+          <span className="break-all text-base">{error}</span>
         </div>
       )}
 
-      <form onSubmit={handleSave} className="w-full max-w-sm space-y-4 text-left">
+      <form onSubmit={handleSave} className="w-full max-w-sm space-y-5 text-left">
         <div>
-          <label className="block text-xs font-bold text-gray-500 mb-1">Project URL</label>
+          <label className="block text-sm font-bold text-gray-500 mb-2">Project URL</label>
           <input 
             type="text" 
             value={url}
             onChange={e => setUrl(e.target.value)}
             placeholder="https://xyz.supabase.co"
-            className="w-full p-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none font-mono"
+            className="w-full p-4 bg-white border border-gray-200 rounded-2xl text-base focus:ring-2 focus:ring-brand-500 outline-none font-mono"
             required
           />
         </div>
         <div>
-          <label className="block text-xs font-bold text-gray-500 mb-1">Anon Public Key</label>
+          <label className="block text-sm font-bold text-gray-500 mb-2">Anon Public Key</label>
           <input 
             type="password" 
             value={key}
             onChange={e => setKey(e.target.value)}
             placeholder="eyJxh..."
-            className="w-full p-3 bg-white border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-brand-500 outline-none font-mono"
+            className="w-full p-4 bg-white border border-gray-200 rounded-2xl text-base focus:ring-2 focus:ring-brand-500 outline-none font-mono"
             required
           />
         </div>
@@ -103,16 +103,16 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
         <button 
           type="submit"
           disabled={isTesting}
-          className="w-full py-4 bg-brand-600 text-white rounded-xl font-bold shadow-lg shadow-brand-200 hover:bg-brand-700 transition-all mt-4 disabled:opacity-70 flex items-center justify-center gap-2"
+          className="w-full py-5 bg-brand-600 text-white rounded-2xl font-bold shadow-lg shadow-brand-200 hover:bg-brand-700 transition-all mt-6 disabled:opacity-70 flex items-center justify-center gap-2 text-lg"
         >
-          {isTesting && <Loader2 size={18} className="animate-spin" />}
+          {isTesting && <Loader2 size={24} className="animate-spin" />}
           {isTesting ? '验证连接中...' : '连接数据库'}
         </button>
         
-        <div className="text-xs text-gray-400 mt-6 leading-relaxed bg-gray-100 p-3 rounded-lg">
-           <strong>首次使用？</strong><br/>
+        <div className="text-sm text-gray-400 mt-8 leading-relaxed bg-gray-100 p-4 rounded-xl">
+           <strong className="text-gray-600">首次使用？</strong><br/>
            请在 Supabase SQL Editor 运行：<br/>
-           <code className="block mt-1 text-[10px] text-gray-500 bg-gray-200 p-1 rounded select-all">
+           <code className="block mt-2 text-xs text-gray-500 bg-gray-200 p-2 rounded select-all font-mono">
              create table transactions (id uuid default gen_random_uuid() primary key, amount numeric, category text, type text, date text, note text, recorded_by text, created_at bigint);
            </code>
         </div>
@@ -127,36 +127,36 @@ const LoginScreen = ({ onLogin, onResetConfig }: { onLogin: (user: UserType) => 
     <div className="min-h-screen bg-gradient-to-br from-brand-50 to-brand-100 flex flex-col items-center justify-center p-6 text-center relative">
       <button 
         onClick={() => { if(confirm('确定要清除数据库配置吗？')) onResetConfig(); }}
-        className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600"
+        className="absolute top-6 right-6 p-3 text-gray-400 hover:text-gray-600"
       >
-        <Settings size={20} />
+        <Settings size={24} />
       </button>
 
-      <div className="w-20 h-20 bg-brand-500 rounded-3xl flex items-center justify-center shadow-xl shadow-brand-200 mb-8 rotate-3">
-        <Sparkles size={40} className="text-white" />
+      <div className="w-24 h-24 bg-brand-500 rounded-3xl flex items-center justify-center shadow-xl shadow-brand-200 mb-8 rotate-3">
+        <Sparkles size={48} className="text-white" />
       </div>
-      <h1 className="text-3xl font-bold text-gray-800 mb-2">欢迎使用夫妻账本</h1>
-      <p className="text-gray-500 mb-10">请选择您的身份，开始共同记账</p>
+      <h1 className="text-4xl font-bold text-gray-800 mb-3">欢迎使用夫妻账本</h1>
+      <p className="text-gray-500 mb-12 text-lg">请选择您的身份，开始共同记账</p>
       
-      <div className="space-y-4 w-full max-w-xs">
+      <div className="space-y-5 w-full max-w-xs">
         <button 
           onClick={() => onLogin('husband')}
-          className="w-full py-4 bg-white hover:bg-blue-50 border-2 border-transparent hover:border-blue-200 text-gray-800 rounded-2xl shadow-sm flex items-center justify-center gap-3 transition-all"
+          className="w-full py-6 bg-white hover:bg-blue-50 border-2 border-transparent hover:border-blue-200 text-gray-800 rounded-3xl shadow-sm flex items-center justify-center gap-4 transition-all"
         >
-          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-            <UserIcon size={20} />
+          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+            <UserIcon size={24} />
           </div>
-          <span className="font-bold text-lg">我是丈夫</span>
+          <span className="font-bold text-xl">我是丈夫</span>
         </button>
         
         <button 
           onClick={() => onLogin('wife')}
-          className="w-full py-4 bg-white hover:bg-pink-50 border-2 border-transparent hover:border-pink-200 text-gray-800 rounded-2xl shadow-sm flex items-center justify-center gap-3 transition-all"
+          className="w-full py-6 bg-white hover:bg-pink-50 border-2 border-transparent hover:border-pink-200 text-gray-800 rounded-3xl shadow-sm flex items-center justify-center gap-4 transition-all"
         >
-          <div className="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center text-pink-600">
-            <UserIcon size={20} />
+          <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center text-pink-600">
+            <UserIcon size={24} />
           </div>
-          <span className="font-bold text-lg">我是妻子</span>
+          <span className="font-bold text-xl">我是妻子</span>
         </button>
       </div>
     </div>
@@ -190,46 +190,46 @@ const Dashboard = ({
   const monthIncome = currentMonthTransactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
 
   return (
-    <div className="p-5 space-y-6">
-      <header className="flex justify-between items-center mb-2">
+    <div className="p-6 space-y-8">
+      <header className="flex justify-between items-center mb-4">
         <div>
-           <h1 className="text-2xl font-bold text-gray-800">夫妻账本</h1>
-           <p className="text-xs text-gray-400 mt-1">
+           <h1 className="text-3xl font-bold text-gray-800">夫妻账本</h1>
+           <p className="text-sm text-gray-400 mt-1">
              当前身份: <span className="font-bold text-brand-600">{currentUser === 'husband' ? '丈夫' : '妻子'}</span>
            </p>
         </div>
-        <button onClick={onChangeUser} className="p-2 bg-white rounded-full shadow-sm text-gray-400 hover:text-brand-600">
-          <LogOut size={18} />
+        <button onClick={onChangeUser} className="p-3 bg-white rounded-full shadow-sm text-gray-400 hover:text-brand-600">
+          <LogOut size={22} />
         </button>
       </header>
 
       {/* Overview Card */}
-      <div className="bg-gradient-to-br from-brand-900 to-brand-600 rounded-2xl p-6 text-white shadow-xl shadow-brand-200/50">
-        <div className="text-brand-100 text-sm font-medium mb-1">家庭总结余</div>
-        <div className="text-4xl font-bold mb-6">
+      <div className="bg-gradient-to-br from-brand-900 to-brand-600 rounded-3xl p-8 text-white shadow-xl shadow-brand-200/50">
+        <div className="text-brand-100 text-base font-medium mb-2">家庭总结余</div>
+        <div className="text-5xl font-bold mb-8">
           {isLoading ? '...' : `¥${totalBalance.toFixed(2)}`}
         </div>
         
-        <div className="flex gap-4">
-          <div className="flex-1 bg-white/10 rounded-xl p-3 backdrop-blur-sm">
-            <div className="text-brand-100 text-xs mb-1">本月收入</div>
-            <div className="font-semibold text-lg text-emerald-300">
-              {isLoading ? '...' : `+¥${monthIncome.toFixed(0)}`}
+        <div className="flex gap-6">
+          <div className="flex-1 bg-white/10 rounded-2xl p-4 backdrop-blur-sm">
+            <div className="text-brand-100 text-sm mb-1">本月收入</div>
+            <div className="font-bold text-2xl text-emerald-300">
+              {isLoading ? '...' : `+${monthIncome.toFixed(0)}`}
             </div>
           </div>
-          <div className="flex-1 bg-white/10 rounded-xl p-3 backdrop-blur-sm">
-            <div className="text-brand-100 text-xs mb-1">本月支出</div>
-            <div className="font-semibold text-lg text-rose-300">
-              {isLoading ? '...' : `-¥${monthExpense.toFixed(0)}`}
+          <div className="flex-1 bg-white/10 rounded-2xl p-4 backdrop-blur-sm">
+            <div className="text-brand-100 text-sm mb-1">本月支出</div>
+            <div className="font-bold text-2xl text-rose-300">
+              {isLoading ? '...' : `-${monthExpense.toFixed(0)}`}
             </div>
           </div>
         </div>
       </div>
 
       <div>
-        <h2 className="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
           最近明细
-          {isLoading && <Loader2 size={16} className="animate-spin text-gray-400" />}
+          {isLoading && <Loader2 size={18} className="animate-spin text-gray-400" />}
         </h2>
         <TransactionList transactions={transactions.slice(0, 10)} onDelete={onDelete} />
       </div>
@@ -333,48 +333,48 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
   };
 
   return (
-    <div className="p-5 pb-20">
-      <h2 className="text-xl font-bold text-gray-800 mb-6">记一笔</h2>
+    <div className="p-6 pb-28">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">记一笔</h2>
 
-      <div className="bg-white p-4 rounded-xl shadow-sm border border-brand-100 mb-6 relative overflow-hidden">
-        <div className="absolute top-0 left-0 w-1 h-full bg-brand-500"></div>
-        <label className="text-xs font-bold text-brand-600 uppercase tracking-wider mb-2 block flex items-center gap-1">
-          <Sparkles size={14} /> AI 智能记账
+      <div className="bg-white p-5 rounded-2xl shadow-sm border border-brand-100 mb-8 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-1.5 h-full bg-brand-500"></div>
+        <label className="text-xs font-bold text-brand-600 uppercase tracking-wider mb-2 block flex items-center gap-1.5">
+          <Sparkles size={16} /> AI 智能记账
         </label>
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           <input
             type="text"
             value={smartInput}
             onChange={(e) => setSmartInput(e.target.value)}
             placeholder="例如：昨天超市买菜花了200"
-            className="flex-1 bg-gray-50 border-none rounded-lg text-sm px-3 py-2 focus:ring-2 focus:ring-brand-200"
+            className="flex-1 bg-gray-50 border-none rounded-xl text-base px-4 py-3 focus:ring-2 focus:ring-brand-200"
           />
           <button 
             type="button"
             onClick={toggleListening}
-            className={`p-2 rounded-lg transition-colors ${isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+            className={`p-3 rounded-xl transition-colors ${isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
           >
-            <Mic size={20} />
+            <Mic size={24} />
           </button>
           <button 
             type="button"
             onClick={handleSmartParse}
             disabled={isAnalyzing || !smartInput}
-            className="p-2 bg-brand-600 text-white rounded-lg hover:bg-brand-700 disabled:opacity-50"
+            className="p-3 bg-brand-600 text-white rounded-xl hover:bg-brand-700 disabled:opacity-50"
           >
-            {isAnalyzing ? <Loader2 size={20} className="animate-spin" /> : <Send size={20} />}
+            {isAnalyzing ? <Loader2 size={24} className="animate-spin" /> : <Send size={24} />}
           </button>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-xl border border-dashed border-gray-200">
-           <span className="text-sm text-gray-500">记账人:</span>
-           <div className="flex gap-2">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="flex items-center gap-4 bg-gray-50 p-4 rounded-2xl border border-dashed border-gray-200">
+           <span className="text-base text-gray-500 font-medium">记账人:</span>
+           <div className="flex gap-3">
              <button
                type="button"
                onClick={() => setActiveUser('husband')}
-               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
+               className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${
                  activeUser === 'husband' ? 'bg-blue-100 text-blue-700' : 'bg-gray-200 text-gray-500'
                }`}
              >
@@ -383,7 +383,7 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
              <button
                type="button"
                onClick={() => setActiveUser('wife')}
-               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${
+               className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${
                  activeUser === 'wife' ? 'bg-pink-100 text-pink-700' : 'bg-gray-200 text-gray-500'
                }`}
              >
@@ -396,7 +396,7 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
             <button
               type="button"
               onClick={() => { setType('expense'); setCategory(CATEGORIES.expense[0]); }}
-              className={`flex-1 py-3 border-2 rounded-xl font-bold transition-all ${
+              className={`flex-1 py-4 border-2 rounded-2xl font-bold text-lg transition-all ${
                 type === 'expense' ? 'border-accent-500 bg-accent-50 text-accent-600' : 'border-gray-200 text-gray-400'
               }`}
             >
@@ -405,7 +405,7 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
             <button
               type="button"
               onClick={() => { setType('income'); setCategory(CATEGORIES.income[0]); }}
-              className={`flex-1 py-3 border-2 rounded-xl font-bold transition-all ${
+              className={`flex-1 py-4 border-2 rounded-2xl font-bold text-lg transition-all ${
                 type === 'income' ? 'border-emerald-500 bg-emerald-50 text-emerald-600' : 'border-gray-200 text-gray-400'
               }`}
             >
@@ -414,28 +414,28 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-500 mb-1">金额</label>
+          <label className="block text-sm font-medium text-gray-500 mb-2">金额</label>
           <div className="relative">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">¥</span>
+            <span className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-4xl">¥</span>
             <input
               type="number"
               inputMode="decimal"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="w-full pl-8 pr-4 py-4 text-3xl font-bold text-gray-800 bg-gray-50 rounded-xl border-none focus:ring-2 focus:ring-brand-500 outline-none placeholder-gray-300"
+              className="w-full pl-14 pr-6 py-8 text-5xl font-bold text-gray-800 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-brand-500 outline-none placeholder-gray-300"
               placeholder="0.00"
               required
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-5">
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1 flex items-center gap-1"><Tag size={12}/> 分类</label>
+            <label className="block text-sm font-medium text-gray-500 mb-2 flex items-center gap-1.5"><Tag size={16}/> 分类</label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full p-3 bg-white border border-gray-200 rounded-xl text-gray-700 focus:ring-brand-500 focus:border-brand-500"
+              className="w-full p-4 bg-white border border-gray-200 rounded-2xl text-lg text-gray-700 focus:ring-brand-500 focus:border-brand-500 appearance-none"
             >
               {(type === 'expense' ? CATEGORIES.expense : CATEGORIES.income).map(c => (
                 <option key={c} value={c}>{c}</option>
@@ -443,34 +443,34 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
             </select>
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1 flex items-center gap-1"><Calendar size={12}/> 日期</label>
+            <label className="block text-sm font-medium text-gray-500 mb-2 flex items-center gap-1.5"><Calendar size={16}/> 日期</label>
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full p-3 bg-white border border-gray-200 rounded-xl text-gray-700 focus:ring-brand-500 focus:border-brand-500"
+              className="w-full p-4 bg-white border border-gray-200 rounded-2xl text-lg text-gray-700 focus:ring-brand-500 focus:border-brand-500"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-gray-500 mb-1 flex items-center gap-1"><FileText size={12}/> 备注 (选填)</label>
+          <label className="block text-sm font-medium text-gray-500 mb-2 flex items-center gap-1.5"><FileText size={16}/> 备注 (选填)</label>
           <input
             type="text"
             value={note}
             onChange={(e) => setNote(e.target.value)}
             placeholder="这笔钱是干嘛的？"
-            className="w-full p-3 bg-white border border-gray-200 rounded-xl text-gray-700 focus:ring-brand-500 focus:border-brand-500"
+            className="w-full p-4 bg-white border border-gray-200 rounded-2xl text-lg text-gray-700 focus:ring-brand-500 focus:border-brand-500"
           />
         </div>
 
         <button
           type="submit"
           disabled={isSaving}
-          className="w-full py-4 bg-gray-900 text-white rounded-xl font-bold shadow-lg shadow-gray-300/50 hover:bg-black active:scale-[0.99] transition-all disabled:opacity-70 flex items-center justify-center gap-2"
+          className="w-full py-5 bg-gray-900 text-white rounded-2xl font-bold text-lg shadow-xl shadow-gray-300/50 hover:bg-black active:scale-[0.99] transition-all disabled:opacity-70 flex items-center justify-center gap-3 mt-4"
         >
-          {isSaving && <Loader2 size={20} className="animate-spin" />}
-          {isSaving ? '保存中...' : '保存'}
+          {isSaving && <Loader2 size={24} className="animate-spin" />}
+          {isSaving ? '保存中...' : '保存记录'}
         </button>
       </form>
     </div>
@@ -524,34 +524,34 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
   const COLORS = ['#f43f5e', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#6366f1'];
   
   return (
-    <div className="p-5 space-y-6">
+    <div className="p-6 space-y-8">
       <header className="flex justify-between items-center">
-         <h2 className="text-xl font-bold text-gray-800">统计报表</h2>
-         <div className="flex bg-gray-100 p-1 rounded-lg">
+         <h2 className="text-2xl font-bold text-gray-800">统计报表</h2>
+         <div className="flex bg-gray-100 p-1.5 rounded-xl">
             <button 
               onClick={() => setTimeFilter('month')}
-              className={`px-3 py-1 text-xs font-bold rounded-md transition-all ${timeFilter === 'month' ? 'bg-white shadow text-brand-600' : 'text-gray-500'}`}
+              className={`px-4 py-1.5 text-sm font-bold rounded-lg transition-all ${timeFilter === 'month' ? 'bg-white shadow text-brand-600' : 'text-gray-500'}`}
             >
               月度
             </button>
             <button 
               onClick={() => setTimeFilter('year')}
-              className={`px-3 py-1 text-xs font-bold rounded-md transition-all ${timeFilter === 'year' ? 'bg-white shadow text-brand-600' : 'text-gray-500'}`}
+              className={`px-4 py-1.5 text-sm font-bold rounded-lg transition-all ${timeFilter === 'year' ? 'bg-white shadow text-brand-600' : 'text-gray-500'}`}
             >
               年度
             </button>
          </div>
       </header>
 
-      <div className="flex items-center justify-between bg-white p-3 rounded-xl border border-gray-100">
+      <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-gray-100">
          <button onClick={() => {
             const newDate = new Date(selectedDate);
             if(timeFilter === 'month') newDate.setMonth(newDate.getMonth() - 1);
             else newDate.setFullYear(newDate.getFullYear() - 1);
             setSelectedDate(newDate);
-         }} className="p-1 text-gray-400 hover:text-gray-600">{'<'}</button>
+         }} className="p-2 text-gray-400 hover:text-gray-600 active:scale-90 transition-transform">{'<'}</button>
          
-         <div className="font-bold text-gray-700">
+         <div className="font-bold text-xl text-gray-700">
            {selectedDate.getFullYear()}年
            {timeFilter === 'month' && ` ${selectedDate.getMonth() + 1}月`}
          </div>
@@ -561,49 +561,49 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
             if(timeFilter === 'month') newDate.setMonth(newDate.getMonth() + 1);
             else newDate.setFullYear(newDate.getFullYear() + 1);
             setSelectedDate(newDate);
-         }} className="p-1 text-gray-400 hover:text-gray-600">{'>'}</button>
+         }} className="p-2 text-gray-400 hover:text-gray-600 active:scale-90 transition-transform">{'>'}</button>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
-         <div className="bg-emerald-50 p-4 rounded-xl border border-emerald-100">
-            <div className="text-xs text-emerald-600 mb-1">总收入</div>
-            <div className="text-lg font-bold text-emerald-700">+{totalIncome.toFixed(0)}</div>
+      <div className="grid grid-cols-2 gap-4">
+         <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100">
+            <div className="text-sm text-emerald-600 mb-2">总收入</div>
+            <div className="text-2xl font-bold text-emerald-700">+{totalIncome.toFixed(0)}</div>
          </div>
-         <div className="bg-rose-50 p-4 rounded-xl border border-rose-100">
-            <div className="text-xs text-rose-600 mb-1">总支出</div>
-            <div className="text-lg font-bold text-rose-700">-{totalExpense.toFixed(0)}</div>
+         <div className="bg-rose-50 p-6 rounded-2xl border border-rose-100">
+            <div className="text-sm text-rose-600 mb-2">总支出</div>
+            <div className="text-2xl font-bold text-rose-700">-{totalExpense.toFixed(0)}</div>
          </div>
       </div>
 
       {expenseData.length > 0 || totalIncome > 0 ? (
         <>
-          <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">收支情况</h3>
-            <div className="h-64 w-full">
+          <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-6">收支情况</h3>
+            <div className="h-72 w-full">
                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart layout="vertical" data={userStatsData} barGap={4} margin={{ left: 10, right: 10, top: 10, bottom: 10 }}>
+                  <BarChart layout="vertical" data={userStatsData} barGap={8} margin={{ left: 10, right: 10, top: 10, bottom: 10 }}>
                     <XAxis type="number" hide />
-                    <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={40} style={{fontSize: '12px', fontWeight: 'bold'}} />
+                    <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={40} style={{fontSize: '14px', fontWeight: 'bold'}} />
                     <RechartsTooltip formatter={(value: number) => `¥${value.toFixed(2)}`} cursor={{fill: 'transparent'}} />
-                    <Legend verticalAlign="top" align="right" iconType="circle" height={36}/>
-                    <Bar dataKey="income" name="收入" fill="#10b981" radius={[0, 4, 4, 0]} barSize={20} />
-                    <Bar dataKey="expense" name="支出" fill="#f43f5e" radius={[0, 4, 4, 0]} barSize={20} />
+                    <Legend verticalAlign="top" align="right" iconType="circle" height={40}/>
+                    <Bar dataKey="income" name="收入" fill="#10b981" radius={[0, 6, 6, 0]} barSize={24} />
+                    <Bar dataKey="expense" name="支出" fill="#f43f5e" radius={[0, 6, 6, 0]} barSize={24} />
                   </BarChart>
                </ResponsiveContainer>
             </div>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
-            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">支出分类占比</h3>
-            <div className="h-64 w-full">
+          <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+            <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-6">支出分类占比</h3>
+            <div className="h-72 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
                       data={expenseData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={60}
-                      outerRadius={80}
+                      innerRadius={70}
+                      outerRadius={100}
                       paddingAngle={5}
                       dataKey="value"
                     >
@@ -612,14 +612,14 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
                       ))}
                     </Pie>
                     <RechartsTooltip formatter={(value: number) => `¥${value.toFixed(2)}`} />
-                    <Legend verticalAlign="bottom" height={36} iconType="circle" />
+                    <Legend verticalAlign="bottom" height={40} iconType="circle" />
                   </PieChart>
                 </ResponsiveContainer>
             </div>
           </div>
         </>
       ) : (
-        <div className="text-center py-10 text-gray-400">该时间段暂无数据</div>
+        <div className="text-center py-16 text-gray-400 text-lg">该时间段暂无数据</div>
       )}
     </div>
   );
