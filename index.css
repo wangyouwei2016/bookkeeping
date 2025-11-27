@@ -5,6 +5,9 @@
 /* Mobile optimizations to make it feel like a Native App */
 :root {
   touch-action: manipulation;
+  /* 核心修复：禁止 iOS 自动调整字体大小，解决 iPhone 显示过大的问题 */
+  -webkit-text-size-adjust: 100%; 
+  text-size-adjust: 100%;
 }
 
 body {
