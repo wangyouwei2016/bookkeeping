@@ -229,6 +229,19 @@ const Dashboard = ({
   // Requirement: Main balance shows "Monthly Balance" instead of Total
   const monthBalance = monthIncome - monthExpense;
 
+  // --- Pagination Logic (Client Side Windowing) ---
+  const [visibleCount, setVisibleCount] = useState(10);
+  
+  // Reset pagination when transaction list drastically changes (optional, but good for refresh)
+  // But strictly we want to keep it simple.
+  
+  const handleLoadMore = () => {
+    setVisibleCount(prev => prev + 10);
+  };
+  
+  const visibleTransactions = transactions.slice(0, visibleCount);
+  const hasMore = visibleCount < transactions.length;
+
   return (
     <div className="p-8 space-y-14">
       <header className="flex justify-between items-center pt-6">
@@ -275,7 +288,13 @@ const Dashboard = ({
           最近明细
           {isLoading && <Loader2 size={40} className="animate-spin text-gray-400" />}
         </h2>
-        <TransactionList transactions={transactions.slice(0, 10)} onDelete={onDelete} />
+        
+        <TransactionList 
+          transactions={visibleTransactions} 
+          onDelete={onDelete} 
+          hasMore={hasMore}
+          onLoadMore={handleLoadMore}
+        />
       </div>
     </div>
   );

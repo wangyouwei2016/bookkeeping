@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Transaction } from '../types';
-import { ShoppingBag, Coffee, Car, Home, Film, DollarSign, Activity, Briefcase, Gift, GraduationCap, Baby, Trash2, ShieldCheck, Receipt, AlertTriangle } from 'lucide-react';
+import { ShoppingBag, Coffee, Car, Home, Film, DollarSign, Activity, Briefcase, Gift, GraduationCap, Baby, Trash2, ShieldCheck, Receipt, AlertTriangle, Loader2 } from 'lucide-react';
 
 interface TransactionListProps {
   transactions: Transaction[];
   onDelete: (id: string) => void;
+  hasMore: boolean;
+  onLoadMore: () => void;
 }
 
 const getCategoryIcon = (category: string) => {
@@ -42,11 +44,38 @@ const formatUser = (user: string) => {
   return user === 'husband' ? '丈夫' : '妻子';
 };
 
-const TransactionList: React.FC<TransactionListProps> = ({ transactions, onDelete }) => {
+const TransactionList: React.FC<TransactionListProps> = ({ transactions, onDelete, hasMore, onLoadMore }) => {
   // State to track which item is being deleted. If null, modal is closed.
   const [itemToDelete, setItemToDelete] = useState<Transaction | null>(null);
+  
+  // Ref for the bottom loader element
+  const loaderRef = useRef<HTMLDivElement>(null);
 
-  if (transactions.length === 0) {
+  // Intersection Observer for Infinite Scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const first = entries[0];
+        if (first.isIntersecting && hasMore) {
+          onLoadMore();
+        }
+      },
+      { threshold: 0.1, rootMargin: '100px' } // Pre-load when within 100px of bottom
+    );
+
+    const currentLoader = loaderRef.current;
+    if (currentLoader) {
+      observer.observe(currentLoader);
+    }
+
+    return () => {
+      if (currentLoader) {
+        observer.unobserve(currentLoader);
+      }
+    };
+  }, [hasMore, onLoadMore]);
+
+  if (transactions.length === 0 && !hasMore) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-gray-300">
         <div className="bg-gray-100 p-12 rounded-full mb-8">
@@ -115,6 +144,18 @@ const TransactionList: React.FC<TransactionListProps> = ({ transactions, onDelet
             </div>
           </div>
         ))}
+        
+        {/* Loading / End of List Indicator */}
+        <div ref={loaderRef} className="py-8 flex justify-center items-center text-gray-400 min-h-[100px]">
+          {hasMore ? (
+            <div className="flex items-center gap-4 text-3xl animate-pulse">
+               <Loader2 size={40} className="animate-spin" />
+               <span>加载更多...</span>
+            </div>
+          ) : (
+             transactions.length > 0 && <span className="text-2xl font-medium opacity-50">—— 到底啦 ——</span>
+          )}
+        </div>
       </div>
 
       {/* Custom Delete Confirmation Modal */}
