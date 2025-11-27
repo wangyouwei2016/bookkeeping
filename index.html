@@ -8,6 +8,7 @@
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#f9fafb">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="/icon-192.png">
   <script type="importmap">
@@ -26,16 +27,14 @@
 }
 </script>
     <style>
-      html, body {
+      /* Reset and base styles for full screen app experience */
+      html, body, #root {
         height: 100%;
+        width: 100%;
         margin: 0;
         padding: 0;
+        overflow: hidden; /* Prevent body scroll, handle scrolling inside the app layout */
         background-color: #f9fafb;
-        /* Prevent bounce effect on iOS to make it feel more native */
-        overscroll-behavior-y: none;
-      }
-      #root {
-        height: 100%;
       }
     </style>
 </head>

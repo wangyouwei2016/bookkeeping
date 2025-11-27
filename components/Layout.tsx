@@ -9,52 +9,83 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange }) => {
   return (
-    // Mobile: Full screen (h-dvh), full width, no rounded corners.
-    // Desktop (md+): Centered "Phone" card styling with borders and shadow.
-    <div className="flex flex-col h-[100dvh] w-full bg-gray-50 relative md:h-[85vh] md:max-w-md md:mx-auto md:my-[5vh] md:rounded-[2.5rem] md:shadow-2xl md:overflow-hidden md:border-[8px] md:border-gray-900 box-border">
+    // Outer Container:
+    // - Mobile: Simple block container occupying full viewport height (dvh).
+    // - Desktop (lg+): Flex container for centering.
+    <div className="w-full h-[100dvh] bg-gray-50 lg:min-h-screen lg:h-auto lg:flex lg:justify-center lg:items-center font-sans overflow-hidden">
       
-      {/* Main Content Area - Internal scrolling */}
-      <main className="flex-1 overflow-y-auto no-scrollbar w-full">
-        {/* Padding bottom ensures content isn't covered by the absolute nav bar */}
-        <div className="pb-28 min-h-full">
+      {/* App Shell:
+          - Mobile: Full width/height, flex column.
+          - Desktop (lg+): Fixed dimensions "phone" card style.
+      */}
+      <div className="w-full h-full flex flex-col relative bg-gray-50
+                      lg:w-[400px] lg:h-[85vh] lg:max-h-[850px] lg:rounded-[2.5rem] lg:shadow-2xl lg:border lg:border-gray-200 lg:overflow-hidden">
+        
+        {/* Main Content Area */}
+        <main className="flex-1 w-full relative overflow-y-auto no-scrollbar scroll-smooth">
+          {/* Bottom padding ensures content isn't hidden behind the Nav Bar. 
+              Using safe-area-inset-bottom for iPhone Home Bar adaptation. */}
+          <div className="pb-[calc(4.5rem+env(safe-area-inset-bottom))] min-h-full">
             {children}
-        </div>
-      </main>
-
-      {/* Bottom Navigation - Absolute to stick to bottom of container */}
-      <nav className="absolute bottom-0 left-0 right-0 w-full bg-white/95 backdrop-blur-sm border-t border-gray-100 flex justify-around items-center pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] z-50 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-        <button
-          onClick={() => onTabChange('home')}
-          className={`flex flex-col items-center gap-1 transition-colors ${
-            activeTab === 'home' ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600'
-          }`}
-        >
-          <Home size={24} strokeWidth={activeTab === 'home' ? 2.5 : 2} />
-          <span className="text-[11px] font-medium">明细</span>
-        </button>
-
-        <button
-          onClick={() => onTabChange('add')}
-          className="flex flex-col items-center -mt-8 relative z-10"
-        >
-          <div className={`rounded-full p-4 shadow-lg transition-transform active:scale-95 ${
-            activeTab === 'add' ? 'bg-brand-600 ring-4 ring-brand-100' : 'bg-brand-500 hover:bg-brand-600'
-          }`}>
-            <PlusCircle size={32} color="white" />
           </div>
-          <span className={`text-[11px] font-medium mt-1 ${activeTab === 'add' ? 'text-brand-600' : 'text-gray-400'}`}>记一笔</span>
-        </button>
+        </main>
 
-        <button
-          onClick={() => onTabChange('stats')}
-          className={`flex flex-col items-center gap-1 transition-colors ${
-            activeTab === 'stats' ? 'text-brand-600' : 'text-gray-400 hover:text-gray-600'
-          }`}
-        >
-          <PieChart size={24} strokeWidth={activeTab === 'stats' ? 2.5 : 2} />
-          <span className="text-[11px] font-medium">统计</span>
-        </button>
-      </nav>
+        {/* Bottom Navigation Bar */}
+        <nav className="absolute bottom-0 left-0 right-0 w-full bg-white/95 backdrop-blur-md border-t border-gray-100 z-50 pb-[env(safe-area-inset-bottom)] transition-all">
+          <div className="flex justify-around items-end h-16 pb-2">
+            
+            {/* Home Tab */}
+            <button
+              onClick={() => onTabChange('home')}
+              className="flex-1 flex flex-col items-center justify-center gap-1 h-full active:scale-95 transition-transform"
+              style={{ minHeight: '44px' }} // Ensure touch target size
+            >
+              <Home 
+                size={24} 
+                className={activeTab === 'home' ? 'text-brand-600' : 'text-gray-400'} 
+                strokeWidth={activeTab === 'home' ? 2.5 : 2} 
+              />
+              <span className={`text-[10px] font-medium ${activeTab === 'home' ? 'text-brand-600' : 'text-gray-400'}`}>
+                明细
+              </span>
+            </button>
+
+            {/* Add Tab (Floating) */}
+            <div className="relative -top-5 flex flex-col items-center justify-center w-16">
+               <button
+                onClick={() => onTabChange('add')}
+                className={`w-14 h-14 rounded-full flex items-center justify-center shadow-lg shadow-brand-200 transition-all active:scale-90 ${
+                  activeTab === 'add' 
+                    ? 'bg-brand-600 ring-4 ring-white' 
+                    : 'bg-brand-500 hover:bg-brand-600 ring-4 ring-white'
+                }`}
+              >
+                <PlusCircle size={28} color="white" />
+              </button>
+              <span className={`text-[10px] font-medium mt-1 ${activeTab === 'add' ? 'text-brand-600' : 'text-gray-400'}`}>
+                记一笔
+              </span>
+            </div>
+
+            {/* Stats Tab */}
+            <button
+              onClick={() => onTabChange('stats')}
+              className="flex-1 flex flex-col items-center justify-center gap-1 h-full active:scale-95 transition-transform"
+              style={{ minHeight: '44px' }} // Ensure touch target size
+            >
+              <PieChart 
+                size={24} 
+                className={activeTab === 'stats' ? 'text-brand-600' : 'text-gray-400'} 
+                strokeWidth={activeTab === 'stats' ? 2.5 : 2} 
+              />
+              <span className={`text-[10px] font-medium ${activeTab === 'stats' ? 'text-brand-600' : 'text-gray-400'}`}>
+                统计
+              </span>
+            </button>
+            
+          </div>
+        </nav>
+      </div>
     </div>
   );
 };

@@ -2,13 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Mobile optimizations */
+/* Mobile optimizations to make it feel like a Native App */
+:root {
+  touch-action: manipulation;
+}
+
 body {
   -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none; /* Disable long-press menu */
+  -webkit-user-select: none;   /* Disable text selection */
+  user-select: none;
+  overscroll-behavior-y: none; /* Prevent pull-to-refresh bounce */
   @apply bg-gray-50 text-gray-800 font-sans antialiased;
 }
 
-/* Hide scrollbar for clean mobile look */
+/* Re-enable text selection for inputs so users can edit text */
+input, textarea, [contenteditable] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Hide scrollbar for clean mobile look but allow scrolling */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
