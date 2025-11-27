@@ -300,6 +300,23 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
     setActiveUser(currentUser);
   }, [currentUser]);
 
+  // Helper to determine supported audio mime type for the device
+  const getSupportedMimeType = () => {
+    const types = [
+        'audio/webm;codecs=opus',
+        'audio/webm',
+        'audio/mp4', // iOS Safari 14.5+
+        'audio/aac',
+        'audio/ogg'
+    ];
+    for (const type of types) {
+        if (MediaRecorder.isTypeSupported(type)) {
+            return type;
+        }
+    }
+    return ''; // Let the browser choose default if all checks fail
+  };
+
   const handleSmartParse = async () => {
     if (!smartInput.trim()) return;
     setIsAnalyzing(true);
@@ -340,7 +357,11 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
+      
+      const mimeType = getSupportedMimeType();
+      const options = mimeType ? { mimeType } : undefined;
+      
+      const mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
 
@@ -354,11 +375,12 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
         // Stop all tracks to release mic
         stream.getTracks().forEach(track => track.stop());
 
-        const mimeType = mediaRecorder.mimeType || 'audio/webm';
-        const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
+        // Create Blob using the same mimeType we recorded with (or default)
+        const finalMimeType = mediaRecorder.mimeType || mimeType || 'audio/webm';
+        const audioBlob = new Blob(audioChunksRef.current, { type: finalMimeType });
         
         if (audioBlob.size === 0) {
-            alert("录音失败，没有捕获到音频");
+            alert("录音失败，没有捕获到音频数据");
             return;
         }
 
@@ -370,20 +392,20 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
         reader.readAsDataURL(audioBlob);
         reader.onloadend = async () => {
            try {
-             // reader.result is like "data:audio/webm;base64,....."
-             const base64String = (reader.result as string).split(',')[1];
-             const text = await transcribeAudioWithGemini(base64String, mimeType);
-             
-             if (text) {
-               const cleanText = text.trim().replace(/[。，！？\.]$/, '');
-               // Append text or replace? For now append if user recorded multiple times.
-               setSmartInput(prev => prev ? prev + ' ' + cleanText : cleanText);
-             } else {
-                alert("未能识别出语音内容，请重试");
+             if (typeof reader.result === 'string') {
+                const base64String = reader.result.split(',')[1];
+                const text = await transcribeAudioWithGemini(base64String, finalMimeType);
+                
+                if (text) {
+                  const cleanText = text.trim().replace(/[。，！？\.]$/, '');
+                  setSmartInput(prev => prev ? prev + ' ' + cleanText : cleanText);
+                } else {
+                   alert("未能识别出语音内容。请检查网络是否正常，或确认 API Key 配置正确。");
+                }
              }
            } catch(e) {
              console.error(e);
-             alert("语音识别服务出错");
+             alert("语音识别服务出错，请稍后重试");
            } finally {
              setIsAnalyzing(false);
            }
