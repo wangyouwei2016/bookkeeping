@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Layout from './components/Layout';
 import TransactionList from './components/TransactionList';
 import { Transaction, UserType, TransactionType, CATEGORIES } from './types';
-import { parseTransactionWithGemini } from './services/geminiService';
+import { parseTransactionWithGemini, transcribeAudioWithGemini } from './services/geminiService';
 import { getSupabase, saveSupabaseConfig, clearSupabaseConfig, testConnection, getStoredConfig, initSupabase } from './services/supabaseClient';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend, BarChart, Bar, XAxis, YAxis, LineChart, Line, CartesianGrid, ReferenceLine } from 'recharts';
@@ -292,8 +292,9 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
   
   const [smartInput, setSmartInput] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [isListening, setIsListening] = useState(false);
-  const recognitionRef = useRef<any>(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
 
   useEffect(() => {
     setActiveUser(currentUser);
@@ -321,65 +322,80 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
     }
   };
 
-  const toggleListening = () => {
-    // 如果正在录音，再次点击则停止
-    if (isListening) {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
+  const toggleListening = async () => {
+    // STOP RECORDING
+    if (isRecording) {
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+        mediaRecorderRef.current.stop();
+        setIsRecording(false);
       }
-      setIsListening(false);
       return;
     }
 
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      alert("您的浏览器不支持语音识别功能，请尝试使用 Chrome 或 Safari");
+    // START RECORDING
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      alert("您的浏览器不支持音频录制，或未授权麦克风");
       return;
     }
 
     try {
-      const recognition = new SpeechRecognition();
-      recognition.lang = 'zh-CN'; 
-      // 开启临时结果，这样说话时能实时看到文字，体验更好
-      recognition.interimResults = true; 
-      recognition.maxAlternatives = 1;
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
 
-      recognitionRef.current = recognition;
-
-      recognition.onstart = () => {
-        setIsListening(true);
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
       };
 
-      recognition.onresult = (event: any) => {
-        let transcript = '';
-        for (let i = 0; i < event.results.length; i++) {
-          transcript += event.results[i][0].transcript;
-        }
+      mediaRecorder.onstop = async () => {
+        // Stop all tracks to release mic
+        stream.getTracks().forEach(track => track.stop());
+
+        const mimeType = mediaRecorder.mimeType || 'audio/webm';
+        const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
         
-        // 去除末尾可能的标点
-        const cleanResult = transcript.replace(/[。，！？]$/, '');
-        setSmartInput(cleanResult);
-      };
-
-      recognition.onerror = (event: any) => {
-        console.error("Speech Recognition Error:", event.error);
-        if (event.error === 'not-allowed') {
-          alert("请允许麦克风权限");
-        } else if (event.error === 'network') {
-          alert("网络错误，语音识别需要联网");
+        if (audioBlob.size === 0) {
+            alert("录音失败，没有捕获到音频");
+            return;
         }
-        setIsListening(false);
+
+        // Processing...
+        setIsAnalyzing(true); 
+        
+        // Convert Blob to Base64 for Gemini
+        const reader = new FileReader();
+        reader.readAsDataURL(audioBlob);
+        reader.onloadend = async () => {
+           try {
+             // reader.result is like "data:audio/webm;base64,....."
+             const base64String = (reader.result as string).split(',')[1];
+             const text = await transcribeAudioWithGemini(base64String, mimeType);
+             
+             if (text) {
+               const cleanText = text.trim().replace(/[。，！？\.]$/, '');
+               // Append text or replace? For now append if user recorded multiple times.
+               setSmartInput(prev => prev ? prev + ' ' + cleanText : cleanText);
+             } else {
+                alert("未能识别出语音内容，请重试");
+             }
+           } catch(e) {
+             console.error(e);
+             alert("语音识别服务出错");
+           } finally {
+             setIsAnalyzing(false);
+           }
+        };
       };
 
-      recognition.onend = () => {
-        setIsListening(false);
-      };
+      mediaRecorder.start();
+      setIsRecording(true);
 
-      recognition.start();
-    } catch (e) {
-      console.error(e);
-      alert("无法启动语音识别");
-      setIsListening(false);
+    } catch (err) {
+      console.error("Mic Error:", err);
+      alert("无法访问麦克风，请检查是否在系统设置中禁用了权限，或者尝试使用 HTTPS 访问。");
     }
   };
 
@@ -425,7 +441,7 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
           <button 
             type="button"
             onClick={toggleListening}
-            className={`p-8 rounded-[2rem] transition-colors ${isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+            className={`p-8 rounded-[2rem] transition-colors ${isRecording ? 'bg-red-500 text-white animate-pulse shadow-xl shadow-red-200' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
           >
             <Mic size={40} />
           </button>

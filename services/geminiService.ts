@@ -56,4 +56,32 @@ const parseTransactionWithGemini = async (input: string): Promise<GeminiParseRes
   }
 };
 
-export { parseTransactionWithGemini };
+const transcribeAudioWithGemini = async (audioBase64: string, mimeType: string): Promise<string | null> => {
+  try {
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+    
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: {
+        parts: [
+          {
+            inlineData: {
+              mimeType: mimeType,
+              data: audioBase64
+            }
+          },
+          {
+            text: "请将这段音频转录为文字。这是一段记账语音，请直接输出识别到的中文或数字内容，不要加任何标点符号（除非必要）或额外的解释文字。"
+          }
+        ]
+      }
+    });
+
+    return response.text || null;
+  } catch (error) {
+    console.error("Gemini STT Error:", error);
+    return null;
+  }
+};
+
+export { parseTransactionWithGemini, transcribeAudioWithGemini };
