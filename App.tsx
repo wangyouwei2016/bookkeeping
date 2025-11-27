@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Layout from './components/Layout';
 import TransactionList from './components/TransactionList';
 import { Transaction, UserType, TransactionType, CATEGORIES } from './types';
@@ -293,6 +293,7 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
   const [smartInput, setSmartInput] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
 
   useEffect(() => {
     setActiveUser(currentUser);
@@ -321,37 +322,65 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
   };
 
   const toggleListening = () => {
-    if (isListening) return; 
-
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      alert("您的浏览器不支持语音识别功能");
+    // 如果正在录音，再次点击则停止
+    if (isListening) {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+      setIsListening(false);
       return;
     }
 
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'zh-CN'; 
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("您的浏览器不支持语音识别功能，请尝试使用 Chrome 或 Safari");
+      return;
+    }
 
-    setIsListening(true);
-    recognition.start();
+    try {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'zh-CN'; 
+      // 开启临时结果，这样说话时能实时看到文字，体验更好
+      recognition.interimResults = true; 
+      recognition.maxAlternatives = 1;
 
-    recognition.onresult = (event: any) => {
-      const speechResult = event.results[0][0].transcript;
-      const cleanResult = speechResult.replace(/[。，！？]$/, '');
-      setSmartInput(cleanResult);
+      recognitionRef.current = recognition;
+
+      recognition.onstart = () => {
+        setIsListening(true);
+      };
+
+      recognition.onresult = (event: any) => {
+        let transcript = '';
+        for (let i = 0; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        
+        // 去除末尾可能的标点
+        const cleanResult = transcript.replace(/[。，！？]$/, '');
+        setSmartInput(cleanResult);
+      };
+
+      recognition.onerror = (event: any) => {
+        console.error("Speech Recognition Error:", event.error);
+        if (event.error === 'not-allowed') {
+          alert("请允许麦克风权限");
+        } else if (event.error === 'network') {
+          alert("网络错误，语音识别需要联网");
+        }
+        setIsListening(false);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognition.start();
+    } catch (e) {
+      console.error(e);
+      alert("无法启动语音识别");
       setIsListening(false);
-    };
-
-    recognition.onerror = (event: any) => {
-      console.error(event.error);
-      setIsListening(false);
-    };
-
-    recognition.onend = () => {
-      setIsListening(false);
-    };
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
