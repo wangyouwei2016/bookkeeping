@@ -536,7 +536,7 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
   const COLORS = ['#f43f5e', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#6366f1'];
   
   return (
-    <div className="p-6 space-y-10">
+    <div className="p-6 space-y-10 pb-40">
       <header className="flex justify-between items-center pt-4">
          <h2 className="text-4xl font-bold text-gray-800">统计报表</h2>
          <div className="flex bg-gray-100 p-3 rounded-2xl">
@@ -590,7 +590,7 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
       {expenseData.length > 0 || totalIncome > 0 ? (
         <>
           <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
-            <h3 className="text-lg font-bold text-gray-500 uppercase tracking-wider mb-10">收支对比</h3>
+            <h3 className="text-2xl font-bold text-gray-500 uppercase tracking-wider mb-10">收支对比</h3>
             <div className="h-96 w-full">
                <ResponsiveContainer width="100%" height="100%">
                   <BarChart layout="vertical" data={userStatsData} barGap={12} margin={{ left: 10, right: 10, top: 10, bottom: 10 }}>
@@ -606,7 +606,7 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
           </div>
 
           <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
-            <h3 className="text-lg font-bold text-gray-500 uppercase tracking-wider mb-10">支出分类占比</h3>
+            <h3 className="text-2xl font-bold text-gray-500 uppercase tracking-wider mb-10">支出分类占比</h3>
             <div className="h-96 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
@@ -627,6 +627,39 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
                     <Legend verticalAlign="bottom" height={50} iconType="circle" wrapperStyle={{ fontSize: '16px', fontWeight: 'bold', paddingTop: '24px' }} />
                   </PieChart>
                 </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
+            <h3 className="text-2xl font-bold text-gray-500 uppercase tracking-wider mb-10">支出排行榜</h3>
+            <div className="space-y-8">
+              {expenseData.map((item, index) => {
+                const percent = totalExpense > 0 ? (item.value / totalExpense * 100).toFixed(1) : '0.0';
+                return (
+                  <div key={item.name} className="flex items-center justify-between">
+                    <div className="flex items-center gap-6">
+                      <div className={`w-16 h-16 rounded-[1.5rem] flex items-center justify-center text-2xl font-bold shrink-0 ${
+                        index === 0 ? 'bg-yellow-100 text-yellow-600' :
+                        index === 1 ? 'bg-gray-200 text-gray-600' :
+                        index === 2 ? 'bg-orange-100 text-orange-600' :
+                        'bg-gray-50 text-gray-400'
+                      }`}>
+                        {index + 1}
+                      </div>
+                      <div>
+                        <div className="text-3xl font-bold text-gray-800">{item.name}</div>
+                        <div className="w-32 bg-gray-100 h-3 rounded-full mt-3 overflow-hidden">
+                           <div className="bg-brand-500 h-full rounded-full" style={{ width: `${percent}%` }}></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                       <div className="text-3xl font-bold text-gray-900">¥{item.value.toFixed(0)}</div>
+                       <div className="text-xl text-gray-400 mt-1">{percent}%</div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </>
