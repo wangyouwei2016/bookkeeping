@@ -6,7 +6,7 @@ import { parseTransactionWithGemini } from './services/geminiService';
 import { getSupabase, saveSupabaseConfig, clearSupabaseConfig, testConnection, getStoredConfig, initSupabase } from './services/supabaseClient';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend, BarChart, Bar, XAxis, YAxis, LineChart, Line, CartesianGrid, ReferenceLine } from 'recharts';
-import { Mic, Send, Sparkles, Loader2, User as UserIcon, Calendar, Tag, FileText, LogOut, Database, Settings, AlertCircle, CloudCog, Globe, Key } from 'lucide-react';
+import { Mic, Send, Sparkles, Loader2, User as UserIcon, Calendar, Tag, FileText, LogOut, Database, Settings, AlertCircle, CloudCog, Globe, Key, ChevronRight } from 'lucide-react';
 
 // --- Components ---
 
@@ -58,77 +58,92 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-brand-50 flex flex-col items-center justify-center p-8 text-center relative overflow-hidden">
-       {/* Background decoration */}
-       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-30">
-        <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[40%] bg-blue-100 rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[40%] bg-teal-100 rounded-full blur-[120px]"></div>
-      </div>
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-6 relative overflow-hidden font-sans">
+       {/* Background decoration consistent with app theme */}
+       <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-brand-50 to-transparent pointer-events-none"></div>
 
-      <div className="bg-white/90 backdrop-blur-2xl p-12 rounded-[4rem] w-full max-w-2xl shadow-2xl border border-white z-10 animate-in zoom-in-95 duration-500">
-        <div className="w-40 h-40 bg-gray-900 rounded-[3rem] flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-gray-300">
-          <Database size={80} className="text-white" />
+      <div className="w-full max-w-2xl relative z-10">
+        
+        {/* Header Area matching Dashboard */}
+        <div className="mb-12 text-center">
+          <div className="w-32 h-32 mx-auto bg-gradient-to-br from-brand-400 to-brand-600 rounded-[2.5rem] flex items-center justify-center shadow-xl shadow-brand-200 mb-8 transform rotate-3">
+             <Database size={64} className="text-white" />
+          </div>
+          <h1 className="text-6xl font-extrabold text-gray-900 tracking-tight mb-4">配置账本</h1>
+          <p className="text-3xl text-gray-500 font-medium flex items-center justify-center gap-3">
+            <span className="w-3 h-3 bg-brand-500 rounded-full"></span>
+            私有数据库连接
+          </p>
         </div>
-        <h1 className="text-6xl font-extrabold text-gray-900 mb-6 tracking-tight">私有数据库连接配置</h1>
-        <p className="text-gray-500 mb-14 text-3xl max-w-lg mx-auto leading-relaxed font-medium">
-          可以使用您自己的数据库保证私密性<br/>
-          <span className="text-gray-400 text-2xl">请连接您的 Supabase 数据库</span>
-        </p>
 
-        {error && (
-          <div className="bg-red-50 text-red-600 p-8 rounded-[2.5rem] text-2xl mb-10 flex items-start gap-4 text-left border border-red-100 animate-in fade-in slide-in-from-top-4">
-            <AlertCircle size={40} className="shrink-0 mt-1" />
-            <span className="break-all font-bold">{error}</span>
+        {/* Main Card */}
+        <div className="bg-white p-10 rounded-[3.5rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-gray-100 relative overflow-hidden">
+          
+          <div className="text-center mb-10">
+             <p className="text-2xl text-gray-500 font-medium leading-relaxed">
+                可以使用您自己的 Supabase 数据库<br/>保证数据的绝对私密性
+             </p>
           </div>
-        )}
 
-        <form onSubmit={handleSave} className="space-y-10 text-left">
-          <div>
-            <label className="block text-3xl font-bold text-gray-700 mb-4 pl-4">Project URL</label>
-            <div className="relative group">
-              <div className="absolute left-8 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-600 transition-colors">
-                <Globe size={36} />
-              </div>
-              <input 
-                type="text" 
-                value={url}
-                onChange={e => setUrl(e.target.value)}
-                placeholder="https://xyz.supabase.co"
-                className="w-full pl-28 pr-8 py-10 bg-gray-50 border-2 border-gray-100 rounded-[3rem] text-3xl font-medium focus:bg-white focus:ring-8 focus:ring-brand-500/10 focus:border-brand-500 outline-none font-mono shadow-inner transition-all placeholder-gray-300"
-                required
-              />
+          {error && (
+            <div className="bg-red-50 text-red-600 p-6 rounded-[2rem] text-xl mb-8 flex items-start gap-4 text-left border border-red-100 animate-in fade-in slide-in-from-top-2">
+              <AlertCircle size={32} className="shrink-0 mt-1" />
+              <span className="break-all font-bold leading-normal">{error}</span>
             </div>
-          </div>
-          <div>
-            <label className="block text-3xl font-bold text-gray-700 mb-4 pl-4">Anon Public Key</label>
-            <div className="relative group">
-              <div className="absolute left-8 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-600 transition-colors">
-                <Key size={36} />
+          )}
+
+          <form onSubmit={handleSave} className="space-y-8">
+            <div className="space-y-3">
+              <label className="block text-xl font-bold text-gray-400 pl-4 uppercase tracking-wider">Project URL</label>
+              <div className="relative group">
+                <div className="absolute left-8 top-1/2 -translate-y-1/2 text-brand-300 group-focus-within:text-brand-500 transition-colors">
+                  <Globe size={32} />
+                </div>
+                <input 
+                  type="text" 
+                  value={url}
+                  onChange={e => setUrl(e.target.value)}
+                  placeholder="https://xyz.supabase.co"
+                  className="w-full pl-24 pr-8 py-8 bg-gray-50 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-[2.5rem] text-2xl font-bold text-gray-800 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all placeholder-gray-300"
+                  required
+                />
               </div>
-              <input 
-                type="password" 
-                value={key}
-                onChange={e => setKey(e.target.value)}
-                placeholder="eyJxh..."
-                className="w-full pl-28 pr-8 py-10 bg-gray-50 border-2 border-gray-100 rounded-[3rem] text-3xl font-medium focus:bg-white focus:ring-8 focus:ring-brand-500/10 focus:border-brand-500 outline-none font-mono shadow-inner transition-all placeholder-gray-300"
-                required
-              />
             </div>
-          </div>
-          
-          <button 
-            type="submit"
-            disabled={isTesting}
-            className="w-full py-10 bg-gray-900 text-white rounded-[3rem] font-bold shadow-xl shadow-gray-400/40 hover:bg-black transition-all mt-12 disabled:opacity-70 flex items-center justify-center gap-6 text-4xl active:scale-[0.98]"
-          >
-            {isTesting && <Loader2 size={48} className="animate-spin" />}
-            {isTesting ? '验证并连接' : '连接数据库'}
-          </button>
-          
-          <div className="text-2xl text-gray-400 mt-12 text-center font-medium">
-             首次使用请先在 Supabase 创建 transactions 表
-          </div>
-        </form>
+
+            <div className="space-y-3">
+              <label className="block text-xl font-bold text-gray-400 pl-4 uppercase tracking-wider">Anon Public Key</label>
+              <div className="relative group">
+                <div className="absolute left-8 top-1/2 -translate-y-1/2 text-brand-300 group-focus-within:text-brand-500 transition-colors">
+                  <Key size={32} />
+                </div>
+                <input 
+                  type="password" 
+                  value={key}
+                  onChange={e => setKey(e.target.value)}
+                  placeholder="eyJxh..."
+                  className="w-full pl-24 pr-8 py-8 bg-gray-50 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-[2.5rem] text-2xl font-bold text-gray-800 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all placeholder-gray-300"
+                  required
+                />
+              </div>
+            </div>
+            
+            <button 
+              type="submit"
+              disabled={isTesting}
+              className="w-full py-8 mt-4 bg-gradient-to-r from-brand-600 to-brand-500 text-white rounded-[2.5rem] font-bold shadow-xl shadow-brand-200 hover:shadow-brand-300 hover:scale-[1.01] active:scale-[0.98] transition-all disabled:opacity-70 flex items-center justify-center gap-4 text-3xl"
+            >
+              {isTesting && <Loader2 size={36} className="animate-spin" />}
+              {isTesting ? '连接中...' : '确认连接'}
+              {!isTesting && <ChevronRight size={36} className="opacity-80" />}
+            </button>
+            
+          </form>
+        </div>
+
+        <div className="text-center mt-12">
+            <p className="text-gray-400 text-xl font-medium">首次使用请确保已创建 transactions 表</p>
+        </div>
+
       </div>
     </div>
   );
