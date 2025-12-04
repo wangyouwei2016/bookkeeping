@@ -244,39 +244,39 @@ const Dashboard = ({
   const hasMore = visibleCount < transactions.length;
 
   return (
-    <div className="p-8 space-y-14">
-      <header className="flex justify-between items-center pt-6">
+    <div className="p-4 sm:p-6 md:p-8 space-y-8 sm:space-y-10 md:space-y-12">
+      <header className="flex justify-between items-center pt-4 sm:pt-6">
         <div>
-           <h1 className="text-6xl font-extrabold text-gray-900 tracking-tight">夫妻账本</h1>
-           <p className="text-3xl text-gray-500 mt-4 font-medium">
-             当前身份: <span className="font-bold text-brand-600 bg-brand-50 px-4 py-2 rounded-2xl">{currentUser === 'husband' ? '丈夫' : '妻子'}</span>
+           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">夫妻账本</h1>
+           <p className="text-base sm:text-lg md:text-xl text-gray-500 mt-2 sm:mt-3 font-medium">
+             当前身份: <span className="font-bold text-brand-600 bg-brand-50 px-3 py-1 rounded-xl sm:rounded-2xl">{currentUser === 'husband' ? '丈夫' : '妻子'}</span>
            </p>
         </div>
-        <button onClick={onChangeUser} className="p-6 bg-white rounded-[2rem] shadow-sm border border-gray-100 text-gray-400 hover:text-brand-600 active:scale-95 transition-all">
-          <LogOut size={40} />
+        <button onClick={onChangeUser} className="p-4 sm:p-5 bg-white rounded-2xl sm:rounded-[2rem] shadow-sm border border-gray-100 text-gray-400 hover:text-brand-600 active:scale-95 transition-all">
+          <LogOut className="w-7 h-7 sm:w-8 sm:h-8" />
         </button>
       </header>
 
       {/* Overview Card */}
-      <div className="bg-gradient-to-br from-brand-900 to-brand-600 rounded-[4rem] p-12 text-white shadow-2xl shadow-brand-200/50 relative overflow-hidden group">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 group-hover:scale-110 transition-transform duration-700"></div>
+      <div className="bg-gradient-to-br from-brand-900 to-brand-600 rounded-3xl sm:rounded-[3.5rem] p-6 sm:p-8 md:p-10 text-white shadow-2xl shadow-brand-200/50 relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-64 h-64 sm:w-80 sm:h-80 bg-white/10 rounded-full blur-3xl -mr-20 -mt-20 group-hover:scale-110 transition-transform duration-700"></div>
         
         <div className="relative z-10">
-          <div className="text-brand-100 text-3xl font-medium mb-6">本月结余</div>
-          <div className="text-8xl font-extrabold mb-14 tracking-tight leading-none">
+          <div className="text-brand-100 text-lg sm:text-xl md:text-2xl font-medium mb-3 sm:mb-4">本月结余</div>
+          <div className="text-4xl sm:text-5xl md:text-6xl font-extrabold mb-6 sm:mb-8 md:mb-10 tracking-tight leading-none">
             {isLoading ? '...' : `¥${monthBalance.toFixed(0)}`}
           </div>
           
-          <div className="flex gap-10">
-            <div className="flex-1 bg-white/10 rounded-[2.5rem] p-8 backdrop-blur-sm border border-white/10">
-              <div className="text-brand-100 text-2xl font-medium mb-3">本月收入</div>
-              <div className="font-bold text-5xl text-emerald-300">
+          <div className="flex gap-4 sm:gap-6 md:gap-8">
+            <div className="flex-1 bg-white/10 rounded-2xl sm:rounded-[2rem] p-4 sm:p-5 md:p-6 backdrop-blur-sm border border-white/10">
+              <div className="text-brand-100 text-sm sm:text-base md:text-lg font-medium mb-2">本月收入</div>
+              <div className="font-bold text-2xl sm:text-3xl md:text-4xl text-emerald-300">
                 {isLoading ? '...' : `+${monthIncome.toFixed(0)}`}
               </div>
             </div>
-            <div className="flex-1 bg-white/10 rounded-[2.5rem] p-8 backdrop-blur-sm border border-white/10">
-              <div className="text-brand-100 text-2xl font-medium mb-3">本月支出</div>
-              <div className="font-bold text-5xl text-rose-300">
+            <div className="flex-1 bg-white/10 rounded-2xl sm:rounded-[2rem] p-4 sm:p-5 md:p-6 backdrop-blur-sm border border-white/10">
+              <div className="text-brand-100 text-sm sm:text-base md:text-lg font-medium mb-2">本月支出</div>
+              <div className="font-bold text-2xl sm:text-3xl md:text-4xl text-rose-300">
                 {isLoading ? '...' : `-${monthExpense.toFixed(0)}`}
               </div>
             </div>
@@ -285,9 +285,9 @@ const Dashboard = ({
       </div>
 
       <div>
-        <h2 className="text-4xl font-bold text-gray-800 mb-10 flex items-center gap-6">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800 mb-6 sm:mb-8 flex items-center gap-4">
           最近明细
-          {isLoading && <Loader2 size={40} className="animate-spin text-gray-400" />}
+          {isLoading && <Loader2 className="w-7 h-7 sm:w-8 sm:h-8 animate-spin text-gray-400" />}
         </h2>
         
         <TransactionList 

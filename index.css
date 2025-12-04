@@ -6,32 +6,22 @@
 
 html {
   /* 
-     核心修复：
-     1. 使用 clamp() 实现响应式基准字体大小
-        - 最小 14px（小屏设备）
-        - 首选 4vw（基于视口宽度动态调整）
-        - 最大 16px（大屏设备）
-     2. 这样可以在不同设备上自动适配，避免 iOS 和 Android 字体差异
-     3. 禁止 WebKit 自动调整文本大小
+     iOS 字体修复方案：
+     1. 完全禁止 iOS 的自动字体缩放
+     2. 使用固定 14px 作为基准（比标准 16px 小）
+     3. 这样在 iOS 上即使用户设置了大字体，也不会影响 PWA
   */
-  font-size: clamp(14px, 4vw, 16px);
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
+  font-size: 14px !important;
+  -webkit-text-size-adjust: none !important;
+  text-size-adjust: none !important;
   
   touch-action: manipulation;
 }
 
-/* 针对小屏幕设备（宽度 < 375px）进一步缩小基准字体 */
-@media (max-width: 374px) {
-  html {
-    font-size: clamp(12px, 3.5vw, 14px);
-  }
-}
-
-/* 针对超大屏幕（平板、桌面）限制最大字体 */
+/* 针对超大屏幕（平板、桌面）使用标准字体 */
 @media (min-width: 768px) {
   html {
-    font-size: 16px;
+    font-size: 16px !important;
   }
 }
 
