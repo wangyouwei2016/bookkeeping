@@ -7,16 +7,32 @@
 html {
   /* 
      核心修复：
-     1. 锁定根字体大小为 16px。
-        iOS PWA 模式会继承系统的“动态字体”设置，导致 rem 单位被放大。
-        因为我们已经设计了极大的字号，如果不锁定，会导致 iOS 上字体大到溢出。
-     2. 禁止 WebKit 自动调整文本大小。
+     1. 使用 clamp() 实现响应式基准字体大小
+        - 最小 14px（小屏设备）
+        - 首选 4vw（基于视口宽度动态调整）
+        - 最大 16px（大屏设备）
+     2. 这样可以在不同设备上自动适配，避免 iOS 和 Android 字体差异
+     3. 禁止 WebKit 自动调整文本大小
   */
-  font-size: 16px;
+  font-size: clamp(14px, 4vw, 16px);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   
   touch-action: manipulation;
+}
+
+/* 针对小屏幕设备（宽度 < 375px）进一步缩小基准字体 */
+@media (max-width: 374px) {
+  html {
+    font-size: clamp(12px, 3.5vw, 14px);
+  }
+}
+
+/* 针对超大屏幕（平板、桌面）限制最大字体 */
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
 }
 
 body {

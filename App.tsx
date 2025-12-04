@@ -59,7 +59,7 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-brand-50 to-brand-100 flex flex-col p-8 font-sans overflow-y-auto relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 to-brand-100 flex flex-col p-4 sm:p-6 md:p-8 font-sans overflow-y-auto relative overflow-hidden">
        {/* Background decoration */}
        <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
           <div className="absolute top-[-10%] right-[-10%] w-[70%] h-[40%] bg-brand-200 rounded-full blur-[100px] opacity-40"></div>
@@ -68,58 +68,58 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
        </div>
 
       {/* Header Area */}
-      <div className="mt-16 mb-16 px-6 relative z-10">
-        <div className="w-24 h-24 bg-white rounded-[2rem] flex items-center justify-center text-brand-600 mb-8 shadow-lg shadow-brand-100 ring-4 ring-white/50">
-           <Database size={48} />
+      <div className="mt-8 sm:mt-12 mb-8 sm:mb-12 px-4 sm:px-6 relative z-10">
+        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-2xl sm:rounded-[2rem] flex items-center justify-center text-brand-600 mb-4 sm:mb-6 shadow-lg shadow-brand-100 ring-4 ring-white/50">
+           <Database className="w-8 h-8 sm:w-10 sm:h-10" />
         </div>
-        <h1 className="text-6xl font-extrabold text-gray-900 tracking-tight mb-6 leading-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-3 sm:mb-4 leading-tight">
           私有数据库<br/>连接配置
         </h1>
-        <p className="text-3xl text-gray-600 font-medium leading-relaxed">
+        <p className="text-lg sm:text-xl md:text-2xl text-gray-600 font-medium leading-relaxed">
           可以使用您自己的数据库<br/>保证数据的绝对私密性
         </p>
       </div>
 
       {/* Main Form Card */}
-      <div className="bg-white/80 backdrop-blur-xl rounded-[3.5rem] p-10 shadow-xl shadow-brand-900/5 border border-white mb-10 relative z-10">
+      <div className="bg-white/80 backdrop-blur-xl rounded-3xl sm:rounded-[3rem] p-6 sm:p-8 shadow-xl shadow-brand-900/5 border border-white mb-6 sm:mb-8 relative z-10">
           
           {error && (
-            <div className="bg-red-50 text-red-600 p-6 rounded-[2rem] text-2xl font-bold mb-10 flex items-start gap-4 text-left border border-red-100 animate-in fade-in">
-              <AlertCircle size={32} className="shrink-0 mt-1" />
+            <div className="bg-red-50 text-red-600 p-4 sm:p-5 rounded-2xl sm:rounded-[2rem] text-base sm:text-lg font-bold mb-6 sm:mb-8 flex items-start gap-3 text-left border border-red-100 animate-in fade-in">
+              <AlertCircle className="w-6 h-6 sm:w-7 sm:h-7 shrink-0 mt-1" />
               <span className="break-all leading-normal">{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSave} className="space-y-12">
-            <div className="space-y-5">
-              <label className="block text-3xl font-bold text-gray-700 ml-4">Project URL</label>
+          <form onSubmit={handleSave} className="space-y-6 sm:space-y-8">
+            <div className="space-y-3 sm:space-y-4">
+              <label className="block text-lg sm:text-xl font-bold text-gray-700 ml-2 sm:ml-3">Project URL</label>
               <div className="relative group">
-                <div className="absolute left-8 top-1/2 -translate-y-1/2 text-brand-500 transition-colors">
-                  <Globe size={40} />
+                <div className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 text-brand-500 transition-colors">
+                  <Globe className="w-6 h-6 sm:w-8 sm:h-8" />
                 </div>
                 <input 
                   type="text" 
                   value={url}
                   onChange={e => setUrl(e.target.value)}
                   placeholder="https://xyz.supabase.co"
-                  className="w-full h-32 pl-28 pr-8 bg-gray-50/80 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-[2.5rem] text-3xl font-bold text-gray-900 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all placeholder-gray-300 shadow-inner"
+                  className="w-full h-16 sm:h-20 pl-16 sm:pl-20 pr-4 sm:pr-6 bg-gray-50/80 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-2xl sm:rounded-[2rem] text-lg sm:text-xl font-bold text-gray-900 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all placeholder-gray-300 shadow-inner"
                   required
                 />
               </div>
             </div>
 
-            <div className="space-y-5">
-              <label className="block text-3xl font-bold text-gray-700 ml-4">Anon Public Key</label>
+            <div className="space-y-3 sm:space-y-4">
+              <label className="block text-lg sm:text-xl font-bold text-gray-700 ml-2 sm:ml-3">Anon Public Key</label>
               <div className="relative group">
-                <div className="absolute left-8 top-1/2 -translate-y-1/2 text-brand-500 transition-colors">
-                  <Key size={40} />
+                <div className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 text-brand-500 transition-colors">
+                  <Key className="w-6 h-6 sm:w-8 sm:h-8" />
                 </div>
                 <input 
                   type="password" 
                   value={key}
                   onChange={e => setKey(e.target.value)}
                   placeholder="eyJxh..."
-                  className="w-full h-32 pl-28 pr-8 bg-gray-50/80 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-[2.5rem] text-3xl font-bold text-gray-900 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all placeholder-gray-300 shadow-inner"
+                  className="w-full h-16 sm:h-20 pl-16 sm:pl-20 pr-4 sm:pr-6 bg-gray-50/80 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-2xl sm:rounded-[2rem] text-lg sm:text-xl font-bold text-gray-900 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all placeholder-gray-300 shadow-inner"
                   required
                 />
               </div>
@@ -128,17 +128,17 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
             <button 
               type="submit"
               disabled={isTesting}
-              className="w-full h-32 mt-8 bg-gradient-to-r from-brand-600 to-brand-500 text-white rounded-[2.5rem] font-bold shadow-2xl shadow-brand-200 hover:scale-[1.01] active:scale-[0.98] transition-all disabled:opacity-70 flex items-center justify-center gap-6 text-4xl"
+              className="w-full h-16 sm:h-20 mt-4 sm:mt-6 bg-gradient-to-r from-brand-600 to-brand-500 text-white rounded-2xl sm:rounded-[2.5rem] font-bold shadow-2xl shadow-brand-200 hover:scale-[1.01] active:scale-[0.98] transition-all disabled:opacity-70 flex items-center justify-center gap-3 sm:gap-4 text-xl sm:text-2xl"
             >
               {isTesting ? (
                 <>
-                  <Loader2 size={48} className="animate-spin" />
+                  <Loader2 className="w-8 h-8 sm:w-10 sm:h-10 animate-spin" />
                   <span>连接中...</span>
                 </>
               ) : (
                 <>
                   <span>确认连接</span>
-                  <ChevronRight size={48} className="opacity-80" />
+                  <ChevronRight className="w-8 h-8 sm:w-10 sm:h-10 opacity-80" />
                 </>
               )}
             </button>
@@ -146,8 +146,8 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
           </form>
       </div>
 
-      <div className="text-center px-8 pb-10 relative z-10">
-          <p className="text-gray-500 text-2xl font-medium leading-relaxed">
+      <div className="text-center px-4 sm:px-6 pb-6 sm:pb-8 relative z-10">
+          <p className="text-gray-500 text-sm sm:text-base md:text-lg font-medium leading-relaxed">
             首次使用请确保已在 Supabase SQL Editor 中创建了 <span className="font-bold text-brand-700 font-mono">transactions</span> 表
           </p>
       </div>
@@ -158,7 +158,7 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
 // 0. LOGIN / IDENTITY SELECTION SCREEN
 const LoginScreen = ({ onLogin, onResetConfig }: { onLogin: (user: UserType) => void, onResetConfig: () => void }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-brand-50 to-brand-100 flex flex-col items-center justify-center p-8 text-center relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 to-brand-100 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 text-center relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-40">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[30%] bg-blue-200 rounded-full blur-[100px]"></div>
@@ -167,36 +167,36 @@ const LoginScreen = ({ onLogin, onResetConfig }: { onLogin: (user: UserType) => 
 
       <button 
         onClick={() => { if(confirm('确定要清除数据库配置吗？')) onResetConfig(); }}
-        className="absolute top-10 right-10 p-8 text-gray-400 hover:text-gray-600 active:scale-95 transition-transform z-10"
+        className="absolute top-4 sm:top-6 right-4 sm:right-6 p-4 sm:p-6 text-gray-400 hover:text-gray-600 active:scale-95 transition-transform z-10"
       >
-        <Settings size={48} />
+        <Settings className="w-8 h-8 sm:w-10 sm:h-10" />
       </button>
 
-      <div className="w-40 h-40 bg-brand-500 rounded-[3rem] flex items-center justify-center shadow-2xl shadow-brand-200 mb-16 rotate-3 z-10">
-        <Sparkles size={80} className="text-white" />
+      <div className="w-20 h-20 sm:w-28 sm:h-28 bg-brand-500 rounded-3xl sm:rounded-[3rem] flex items-center justify-center shadow-2xl shadow-brand-200 mb-8 sm:mb-12 rotate-3 z-10">
+        <Sparkles className="w-10 h-10 sm:w-14 sm:h-14 text-white" />
       </div>
-      <h1 className="text-7xl font-bold text-gray-800 mb-8 z-10 tracking-tight">夫妻账本</h1>
-      <p className="text-gray-500 mb-24 text-4xl z-10 font-medium">请选择您的身份</p>
+      <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-800 mb-4 sm:mb-6 z-10 tracking-tight">夫妻账本</h1>
+      <p className="text-gray-500 mb-12 sm:mb-16 text-xl sm:text-2xl md:text-3xl z-10 font-medium">请选择您的身份</p>
       
-      <div className="space-y-10 w-full max-w-lg z-10">
+      <div className="space-y-5 sm:space-y-7 w-full max-w-md sm:max-w-lg z-10">
         <button 
           onClick={() => onLogin('husband')}
-          className="w-full py-12 bg-white hover:bg-blue-50 border-4 border-white hover:border-blue-100 text-gray-800 rounded-[3rem] shadow-xl flex items-center justify-center gap-8 transition-all active:scale-[0.98]"
+          className="w-full py-6 sm:py-8 bg-white hover:bg-blue-50 border-4 border-white hover:border-blue-100 text-gray-800 rounded-3xl sm:rounded-[3rem] shadow-xl flex items-center justify-center gap-4 sm:gap-6 transition-all active:scale-[0.98]"
         >
-          <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-            <UserIcon size={56} />
+          <div className="w-14 h-14 sm:w-18 sm:h-18 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+            <UserIcon className="w-7 h-7 sm:w-9 sm:h-9" />
           </div>
-          <span className="font-bold text-5xl">我是丈夫</span>
+          <span className="font-bold text-2xl sm:text-3xl md:text-4xl">我是丈夫</span>
         </button>
         
         <button 
           onClick={() => onLogin('wife')}
-          className="w-full py-12 bg-white hover:bg-pink-50 border-4 border-white hover:border-pink-100 text-gray-800 rounded-[3rem] shadow-xl flex items-center justify-center gap-8 transition-all active:scale-[0.98]"
+          className="w-full py-6 sm:py-8 bg-white hover:bg-pink-50 border-4 border-white hover:border-pink-100 text-gray-800 rounded-3xl sm:rounded-[3rem] shadow-xl flex items-center justify-center gap-4 sm:gap-6 transition-all active:scale-[0.98]"
         >
-          <div className="w-24 h-24 bg-pink-100 rounded-full flex items-center justify-center text-pink-600">
-            <UserIcon size={56} />
+          <div className="w-14 h-14 sm:w-18 sm:h-18 bg-pink-100 rounded-full flex items-center justify-center text-pink-600">
+            <UserIcon className="w-7 h-7 sm:w-9 sm:h-9" />
           </div>
-          <span className="font-bold text-5xl">我是妻子</span>
+          <span className="font-bold text-2xl sm:text-3xl md:text-4xl">我是妻子</span>
         </button>
       </div>
     </div>
