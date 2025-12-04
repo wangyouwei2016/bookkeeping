@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Layout from './components/Layout';
 import TransactionList from './components/TransactionList';
+import VoiceRecordingModal from './components/VoiceRecordingModal';
 import { Transaction, UserType, TransactionType, CATEGORIES } from './types';
 import { parseTransactionWithGemini, transcribeAudioWithGemini } from './services/geminiService';
 import { getSupabase, saveSupabaseConfig, clearSupabaseConfig, testConnection, getStoredConfig, initSupabase } from './services/supabaseClient';
@@ -463,10 +464,18 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
   };
 
   return (
-    <div className="p-8 pb-48">
-      <h2 className="text-5xl font-bold text-gray-800 mb-12 pt-6">记一笔</h2>
+    <>
+      {/* Voice Recording Modal */}
+      <VoiceRecordingModal 
+        isRecording={isRecording}
+        isAnalyzing={isAnalyzing}
+        onCancel={toggleListening}
+      />
 
-      <div className="bg-white p-8 rounded-[3rem] shadow-sm border border-brand-100 mb-14 relative overflow-hidden">
+      <div className="p-8 pb-48">
+        <h2 className="text-5xl font-bold text-gray-800 mb-12 pt-6">记一笔</h2>
+
+        <div className="bg-white p-8 rounded-[3rem] shadow-sm border border-brand-100 mb-14 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-4 h-full bg-brand-500"></div>
         <label className="text-2xl font-bold text-brand-600 uppercase tracking-wider mb-6 block flex items-center gap-3">
           <Sparkles size={32} /> AI 智能记账
@@ -605,7 +614,8 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
           {isSaving ? '保存中...' : '保存记录'}
         </button>
       </form>
-    </div>
+      </div>
+    </>
   );
 };
 
