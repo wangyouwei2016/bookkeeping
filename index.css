@@ -8,20 +8,20 @@ html {
   /* 
      跨平台字体优化方案：
      1. 完全禁止 iOS 的自动字体缩放
-     2. Android 使用较大的 18px，iOS 使用适中的 11px
-     3. 保证两端显示一致，图表比例正常
+     2. Android 使用较大的 22px，iOS 使用 13px 保证布局正常
+     3. 保证两端显示一致，所有元素比例正常
   */
-  font-size: 18px !important;
+  font-size: 22px !important;
   -webkit-text-size-adjust: none !important;
   text-size-adjust: none !important;
   
   touch-action: manipulation;
 }
 
-/* iOS 设备使用较小但合理的字体 */
+/* iOS 设备使用合理的字体，确保布局不会出格 */
 @supports (-webkit-touch-callout: none) {
   html {
-    font-size: 11px !important;
+    font-size: 13px !important;
   }
 }
 
