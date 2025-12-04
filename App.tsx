@@ -247,8 +247,7 @@ const Dashboard = ({
     <div className="p-4 sm:p-6 md:p-8 space-y-8 sm:space-y-10 md:space-y-12">
       <header className="flex justify-between items-center pt-4 sm:pt-6">
         <div>
-           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight">夫妻账本</h1>
-           <p className="text-base sm:text-lg md:text-xl text-gray-500 mt-2 sm:mt-3 font-medium">
+           <p className="text-base sm:text-lg md:text-xl text-gray-500 font-medium">
              当前身份: <span className="font-bold text-brand-600 bg-brand-50 px-3 py-1 rounded-xl sm:rounded-2xl">{currentUser === 'husband' ? '丈夫' : '妻子'}</span>
            </p>
         </div>

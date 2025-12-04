@@ -6,16 +6,23 @@
 
 html {
   /* 
-     iOS 字体修复方案：
+     跨平台字体优化方案：
      1. 完全禁止 iOS 的自动字体缩放
-     2. 使用固定 14px 作为基准（比标准 16px 小）
+     2. Android 使用标准 16px，iOS 使用更小的 12px
      3. 这样在 iOS 上即使用户设置了大字体，也不会影响 PWA
   */
-  font-size: 14px !important;
+  font-size: 16px !important;
   -webkit-text-size-adjust: none !important;
   text-size-adjust: none !important;
   
   touch-action: manipulation;
+}
+
+/* iOS 设备使用更小的字体 */
+@supports (-webkit-touch-callout: none) {
+  html {
+    font-size: 12px !important;
+  }
 }
 
 /* 针对超大屏幕（平板、桌面）使用标准字体 */
