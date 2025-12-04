@@ -59,7 +59,7 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-brand-50 to-brand-100 flex flex-col p-4 sm:p-6 md:p-8 font-sans overflow-y-auto relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 to-brand-100 flex flex-col p-3 sm:p-4 font-sans overflow-y-auto relative overflow-hidden">
        {/* Background decoration */}
        <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
           <div className="absolute top-[-10%] right-[-10%] w-[70%] h-[40%] bg-brand-200 rounded-full blur-[100px] opacity-40"></div>
@@ -68,58 +68,58 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
        </div>
 
       {/* Header Area */}
-      <div className="mt-8 sm:mt-12 mb-8 sm:mb-12 px-4 sm:px-6 relative z-10">
-        <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-2xl sm:rounded-[2rem] flex items-center justify-center text-brand-600 mb-4 sm:mb-6 shadow-lg shadow-brand-100 ring-4 ring-white/50">
-           <Database className="w-8 h-8 sm:w-10 sm:h-10" />
+      <div className="mt-4 sm:mt-6 mb-4 sm:mb-6 px-3 sm:px-4 relative z-10">
+        <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white rounded-xl sm:rounded-2xl flex items-center justify-center text-brand-600 mb-3 sm:mb-4 shadow-lg shadow-brand-100 ring-2 ring-white/50">
+           <Database className="w-6 h-6 sm:w-7 sm:h-7" />
         </div>
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-3 sm:mb-4 leading-tight">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight mb-2 sm:mb-3 leading-tight">
           私有数据库<br/>连接配置
         </h1>
-        <p className="text-lg sm:text-xl md:text-2xl text-gray-600 font-medium leading-relaxed">
+        <p className="text-sm sm:text-base md:text-lg text-gray-600 font-medium leading-relaxed">
           可以使用您自己的数据库<br/>保证数据的绝对私密性
         </p>
       </div>
 
       {/* Main Form Card */}
-      <div className="bg-white/80 backdrop-blur-xl rounded-3xl sm:rounded-[3rem] p-6 sm:p-8 shadow-xl shadow-brand-900/5 border border-white mb-6 sm:mb-8 relative z-10">
+      <div className="bg-white/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-xl shadow-brand-900/5 border border-white mb-4 sm:mb-5 relative z-10">
           
           {error && (
-            <div className="bg-red-50 text-red-600 p-4 sm:p-5 rounded-2xl sm:rounded-[2rem] text-base sm:text-lg font-bold mb-6 sm:mb-8 flex items-start gap-3 text-left border border-red-100 animate-in fade-in">
-              <AlertCircle className="w-6 h-6 sm:w-7 sm:h-7 shrink-0 mt-1" />
+            <div className="bg-red-50 text-red-600 p-3 sm:p-4 rounded-xl sm:rounded-2xl text-sm sm:text-base font-bold mb-4 sm:mb-5 flex items-start gap-2 text-left border border-red-100 animate-in fade-in">
+              <AlertCircle className="w-5 h-5 sm:w-6 sm:h-6 shrink-0 mt-0.5" />
               <span className="break-all leading-normal">{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSave} className="space-y-6 sm:space-y-8">
-            <div className="space-y-3 sm:space-y-4">
-              <label className="block text-lg sm:text-xl font-bold text-gray-700 ml-2 sm:ml-3">Project URL</label>
+          <form onSubmit={handleSave} className="space-y-4 sm:space-y-5">
+            <div className="space-y-2 sm:space-y-2.5">
+              <label className="block text-sm sm:text-base font-bold text-gray-700 ml-1 sm:ml-2">Project URL</label>
               <div className="relative group">
-                <div className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 text-brand-500 transition-colors">
-                  <Globe className="w-6 h-6 sm:w-8 sm:h-8" />
+                <div className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-brand-500 transition-colors">
+                  <Globe className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
                 <input 
                   type="text" 
                   value={url}
                   onChange={e => setUrl(e.target.value)}
                   placeholder="https://xyz.supabase.co"
-                  className="w-full h-16 sm:h-20 pl-16 sm:pl-20 pr-4 sm:pr-6 bg-gray-50/80 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-2xl sm:rounded-[2rem] text-lg sm:text-xl font-bold text-gray-900 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all placeholder-gray-300 shadow-inner"
+                  className="w-full h-12 sm:h-14 pl-12 sm:pl-14 pr-3 sm:pr-4 bg-gray-50/80 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-xl sm:rounded-2xl text-sm sm:text-base font-bold text-gray-900 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all placeholder-gray-300 shadow-inner"
                   required
                 />
               </div>
             </div>
 
-            <div className="space-y-3 sm:space-y-4">
-              <label className="block text-lg sm:text-xl font-bold text-gray-700 ml-2 sm:ml-3">Anon Public Key</label>
+            <div className="space-y-2 sm:space-y-2.5">
+              <label className="block text-sm sm:text-base font-bold text-gray-700 ml-1 sm:ml-2">Anon Public Key</label>
               <div className="relative group">
-                <div className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 text-brand-500 transition-colors">
-                  <Key className="w-6 h-6 sm:w-8 sm:h-8" />
+                <div className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-brand-500 transition-colors">
+                  <Key className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
                 <input 
                   type="password" 
                   value={key}
                   onChange={e => setKey(e.target.value)}
                   placeholder="eyJxh..."
-                  className="w-full h-16 sm:h-20 pl-16 sm:pl-20 pr-4 sm:pr-6 bg-gray-50/80 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-2xl sm:rounded-[2rem] text-lg sm:text-xl font-bold text-gray-900 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all placeholder-gray-300 shadow-inner"
+                  className="w-full h-12 sm:h-14 pl-12 sm:pl-14 pr-3 sm:pr-4 bg-gray-50/80 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-xl sm:rounded-2xl text-sm sm:text-base font-bold text-gray-900 focus:ring-4 focus:ring-brand-500/10 outline-none transition-all placeholder-gray-300 shadow-inner"
                   required
                 />
               </div>
@@ -128,17 +128,17 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
             <button 
               type="submit"
               disabled={isTesting}
-              className="w-full h-16 sm:h-20 mt-4 sm:mt-6 bg-gradient-to-r from-brand-600 to-brand-500 text-white rounded-2xl sm:rounded-[2.5rem] font-bold shadow-2xl shadow-brand-200 hover:scale-[1.01] active:scale-[0.98] transition-all disabled:opacity-70 flex items-center justify-center gap-3 sm:gap-4 text-xl sm:text-2xl"
+              className="w-full h-12 sm:h-14 mt-3 sm:mt-4 bg-gradient-to-r from-brand-600 to-brand-500 text-white rounded-xl sm:rounded-2xl font-bold shadow-2xl shadow-brand-200 hover:scale-[1.01] active:scale-[0.98] transition-all disabled:opacity-70 flex items-center justify-center gap-2 sm:gap-3 text-base sm:text-lg"
             >
               {isTesting ? (
                 <>
-                  <Loader2 className="w-8 h-8 sm:w-10 sm:h-10 animate-spin" />
+                  <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin" />
                   <span>连接中...</span>
                 </>
               ) : (
                 <>
                   <span>确认连接</span>
-                  <ChevronRight className="w-8 h-8 sm:w-10 sm:h-10 opacity-80" />
+                  <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 opacity-80" />
                 </>
               )}
             </button>
@@ -146,8 +146,8 @@ const ConfigScreen = ({ onConfigSuccess }: { onConfigSuccess: (client: SupabaseC
           </form>
       </div>
 
-      <div className="text-center px-4 sm:px-6 pb-6 sm:pb-8 relative z-10">
-          <p className="text-gray-500 text-sm sm:text-base md:text-lg font-medium leading-relaxed">
+      <div className="text-center px-3 sm:px-4 pb-4 sm:pb-5 relative z-10">
+          <p className="text-gray-500 text-xs sm:text-sm font-medium leading-relaxed">
             首次使用请确保已在 Supabase SQL Editor 中创建了 <span className="font-bold text-brand-700 font-mono">transactions</span> 表
           </p>
       </div>
