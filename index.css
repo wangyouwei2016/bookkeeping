@@ -8,20 +8,20 @@ html {
   /* 
      跨平台字体优化方案：
      1. 完全禁止 iOS 的自动字体缩放
-     2. Android 使用较大的 20px，iOS 使用更小的 8px
-     3. 这样在 iOS 上即使用户设置了大字体，也不会影响 PWA
+     2. Android 使用较大的 18px，iOS 使用适中的 11px
+     3. 保证两端显示一致，图表比例正常
   */
-  font-size: 20px !important;
+  font-size: 18px !important;
   -webkit-text-size-adjust: none !important;
   text-size-adjust: none !important;
   
   touch-action: manipulation;
 }
 
-/* iOS 设备使用更小的字体 */
+/* iOS 设备使用较小但合理的字体 */
 @supports (-webkit-touch-callout: none) {
   html {
-    font-size: 8px !important;
+    font-size: 11px !important;
   }
 }
 
