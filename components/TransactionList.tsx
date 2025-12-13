@@ -31,11 +31,17 @@ const getCategoryIcon = (category: string) => {
   }
 };
 
+// Helper function to parse date string as local date
+const parseLocalDate = (dateStr: string) => {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  return new Date(year, month - 1, day);
+};
+
 const formatDate = (dateStr: string) => {
-  const date = new Date(dateStr);
+  const date = parseLocalDate(dateStr);
   const today = new Date();
   const isToday = date.toDateString() === today.toDateString();
-  
+
   if (isToday) return '今天';
   return date.toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }) + '日';
 };

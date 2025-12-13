@@ -220,7 +220,7 @@ const Dashboard = ({
   // Get current month stats
   const now = new Date();
   const currentMonthTransactions = transactions.filter(t => {
-    const d = new Date(t.date);
+    const d = parseLocalDate(t.date);
     return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
   });
 
@@ -300,6 +300,20 @@ const Dashboard = ({
   );
 };
 
+// Helper function to get local date string without timezone conversion
+const getLocalDateString = (date = new Date()) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+// Helper function to parse date string as local date
+const parseLocalDate = (dateStr: string) => {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  return new Date(year, month - 1, day);
+};
+
 // 2. ADD TRANSACTION PAGE
 const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transaction) => void, currentUser: UserType, isSaving: boolean }) => {
   const [activeUser, setActiveUser] = useState<UserType>(currentUser);
@@ -307,7 +321,7 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
   const [category, setCategory] = useState(CATEGORIES.expense[0]);
   const [type, setType] = useState<TransactionType>('expense');
   const [note, setNote] = useState('');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+  const [date, setDate] = useState(getLocalDateString());
   
   const [smartInput, setSmartInput] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);

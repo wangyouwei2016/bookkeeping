@@ -27,11 +27,19 @@ const callProxy = async (contents: any, config?: any) => {
   return await response.json();
 };
 
+// Helper function to get local date string without timezone conversion
+const getLocalDateString = (date = new Date()) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 const parseTransactionWithGemini = async (input: string): Promise<GeminiParseResult | null> => {
   try {
     const expenseCats = CATEGORIES.expense.join(", ");
     const incomeCats = CATEGORIES.income.join(", ");
-    const today = new Date().toISOString().split('T')[0];
+    const today = getLocalDateString();
 
     const prompt = `
       当前日期: ${today}
