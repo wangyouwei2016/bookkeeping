@@ -7,7 +7,8 @@ import { parseTransactionWithGemini, transcribeAudioWithGemini } from './service
 import { getSupabase, saveSupabaseConfig, clearSupabaseConfig, testConnection, getStoredConfig, initSupabase } from './services/supabaseClient';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip, Legend, BarChart, Bar, XAxis, YAxis, LineChart, Line, CartesianGrid, ReferenceLine } from 'recharts';
-import { Mic, Send, Sparkles, Loader2, User as UserIcon, Calendar, Tag, FileText, LogOut, Database, Settings, AlertCircle, CloudCog, Globe, Key, ChevronRight } from 'lucide-react';
+import { Mic, Send, Sparkles, Loader2, User as UserIcon, Calendar, Tag, FileText, LogOut, Database, Settings, AlertCircle, CloudCog, Globe, Key, ChevronRight, ChevronDown, Coffee, ShoppingBag, Receipt, Car, Home, Film, ShieldCheck, DollarSign, Activity, Briefcase, GraduationCap, Baby, Gift } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // --- Components ---
 
@@ -632,10 +633,47 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
   );
 };
 
+// 工具函数
+const getCategoryIcon = (category: string) => {
+  const size = 40;
+  switch (category) {
+    case '餐饮': return <Coffee size={size} />;
+    case '购物': return <ShoppingBag size={size} />;
+    case '生活费用': return <Receipt size={size} />;
+    case '交通': return <Car size={size} />;
+    case '居住': return <Home size={size} />;
+    case '娱乐': return <Film size={size} />;
+    case '保险': return <ShieldCheck size={size} />;
+    case '工资': return <DollarSign size={size} />;
+    case '医疗': return <Activity size={size} />;
+    case '旅行': return <Briefcase size={size} />;
+    case '教育': return <GraduationCap size={size} />;
+    case '育儿': return <Baby size={size} />;
+    case '红包': return <Gift size={size} />;
+    case '奖金': return <Gift size={size} />;
+    case '理财': return <Activity size={size} />;
+    default: return <DollarSign size={size} />;
+  }
+};
+
+const formatDate = (dateStr: string) => {
+  const date = new Date(dateStr);
+  const today = new Date();
+  const isToday = date.toDateString() === today.toDateString();
+
+  if (isToday) return '今天';
+  return date.toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }) + '日';
+};
+
+const formatUser = (user: string) => {
+  return user === 'husband' ? '丈夫' : '妻子';
+};
+
 // 3. STATS PAGE
 const Stats = ({ transactions }: { transactions: Transaction[] }) => {
   const [timeFilter, setTimeFilter] = useState<'month' | 'year'>('month');
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
 
   const filteredTransactions = transactions.filter(t => {
     const d = new Date(t.date);
@@ -643,6 +681,13 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
     if (timeFilter === 'year') return isYearMatch;
     return isYearMatch && d.getMonth() === selectedDate.getMonth();
   });
+
+  // 辅助函数：获取特定分类的交易明细
+  const getTransactionsByCategory = (category: string) => {
+    return filteredTransactions
+      .filter(t => t.type === 'expense' && t.category === category)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  };
 
   const expenseData = filteredTransactions
     .filter(t => t.type === 'expense')
@@ -697,7 +742,12 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
   }
 
   const COLORS = ['#f43f5e', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#ec4899', '#6366f1'];
-  
+
+  // 当时间筛选变化时，重置展开状态
+  useEffect(() => {
+    setExpandedCategory(null);
+  }, [timeFilter, selectedDate]);
+
   return (
     <div className="p-8 space-y-12 pb-48">
       <header className="flex justify-between items-center pt-6">
@@ -828,28 +878,105 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
             <div className="space-y-10">
               {expenseData.map((item, index) => {
                 const percent = totalExpense > 0 ? (item.value / totalExpense * 100).toFixed(1) : '0.0';
+                const isExpanded = expandedCategory === item.name;
+                const categoryTransactions = getTransactionsByCategory(item.name);
+
                 return (
-                  <div key={item.name} className="flex items-center justify-between">
-                    <div className="flex items-center gap-8">
-                      <div className={`w-20 h-20 rounded-[2rem] flex items-center justify-center text-3xl font-bold shrink-0 ${
-                        index === 0 ? 'bg-yellow-100 text-yellow-600' :
-                        index === 1 ? 'bg-gray-200 text-gray-600' :
-                        index === 2 ? 'bg-orange-100 text-orange-600' :
-                        'bg-gray-50 text-gray-400'
-                      }`}>
-                        {index + 1}
-                      </div>
-                      <div>
-                        <div className="text-4xl font-bold text-gray-800">{item.name}</div>
-                        <div className="w-40 bg-gray-100 h-4 rounded-full mt-4 overflow-hidden">
-                           <div className="bg-brand-500 h-full rounded-full" style={{ width: `${percent}%` }}></div>
+                  <div key={item.name} className="space-y-4">
+                    {/* 主排行榜项 - 可点击展开 */}
+                    <button
+                      onClick={() => {
+                        setExpandedCategory(isExpanded ? null : item.name);
+                      }}
+                      className="w-full flex items-center justify-between active:scale-[0.99] transition-transform"
+                    >
+                      <div className="flex items-center gap-8">
+                        <div className={`w-20 h-20 rounded-[2rem] flex items-center justify-center text-3xl font-bold shrink-0 ${
+                          index === 0 ? 'bg-yellow-100 text-yellow-600' :
+                          index === 1 ? 'bg-gray-200 text-gray-600' :
+                          index === 2 ? 'bg-orange-100 text-orange-600' :
+                          'bg-gray-50 text-gray-400'
+                        }`}>
+                          {index + 1}
+                        </div>
+                        <div>
+                          <div className="text-4xl font-bold text-gray-800">{item.name}</div>
+                          <div className="w-40 bg-gray-100 h-4 rounded-full mt-4 overflow-hidden">
+                             <div className="bg-brand-500 h-full rounded-full" style={{ width: `${percent}%` }}></div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="text-right">
-                       <div className="text-4xl font-bold text-gray-900">¥{item.value.toFixed(0)}</div>
-                       <div className="text-2xl text-gray-400 mt-2">{percent}%</div>
-                    </div>
+                      <div className="text-right">
+                         <div className="text-4xl font-bold text-gray-900">¥{item.value.toFixed(0)}</div>
+                         <div className="text-2xl text-gray-400 mt-2">{percent}%</div>
+                      </div>
+                      {/* 展开指示器 */}
+                      <motion.div
+                        animate={{ rotate: isExpanded ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="ml-4"
+                      >
+                        <ChevronDown className="w-6 h-6 text-gray-400" />
+                      </motion.div>
+                    </button>
+
+                    {/* 展开的明细区域 */}
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: 'easeInOut' }}
+                          className="overflow-hidden"
+                        >
+                          <div className="pt-4 pl-12 space-y-3">
+                            {/* 明细列表 */}
+                            {categoryTransactions.length === 0 ? (
+                              <div className="text-center py-8 text-gray-400 text-lg">
+                                该分类暂无支出记录
+                              </div>
+                            ) : (
+                              categoryTransactions.map((transaction) => (
+                                <div key={transaction.id} className="flex items-center justify-between bg-gray-50 rounded-2xl p-4">
+                                  <div className="flex items-center gap-4">
+                                    <div className="p-3 rounded-xl bg-white text-red-500">
+                                      {getCategoryIcon(transaction.category)}
+                                    </div>
+                                    <div>
+                                      <div className="text-xl font-bold text-gray-800">{transaction.category}</div>
+                                      <div className="text-sm text-gray-400 flex items-center gap-2">
+                                        <span>{formatDate(transaction.date)}</span>
+                                        <span className="w-1.5 h-1.5 bg-gray-300 rounded-full"></span>
+                                        <span className={`px-2 py-1 rounded-lg text-xs font-bold ${
+                                          transaction.user === 'husband' ? 'bg-blue-50 text-blue-600' : 'bg-pink-50 text-pink-600'
+                                        }`}>
+                                          {formatUser(transaction.user)}
+                                        </span>
+                                      </div>
+                                      {transaction.note && (
+                                        <div className="text-gray-400 text-sm mt-1 truncate max-w-[200px]">
+                                          {transaction.note}
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div className="font-extrabold text-2xl text-gray-900">
+                                    -{transaction.amount.toFixed(0)}
+                                  </div>
+                                </div>
+                              ))
+                            )}
+                            {/* 总数显示 */}
+                            {categoryTransactions.length > 0 && (
+                              <div className="text-center text-gray-500 text-lg pt-2">
+                                共 {categoryTransactions.length} 笔交易
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 );
               })}
