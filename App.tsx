@@ -491,8 +491,8 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
 
         <div className="bg-white p-6 rounded-3xl shadow-sm border border-brand-100 mb-10 relative overflow-hidden">
         <div className="absolute top-0 left-0 w-3 h-full bg-brand-500"></div>
-        <label className="text-xl font-bold text-brand-600 uppercase tracking-wider mb-4 block flex items-center gap-2">
-          <Sparkles size={24} /> AI 智能记账
+        <label className="text-2xl font-bold text-brand-600 uppercase tracking-wider mb-5 block flex items-center gap-3">
+          <Sparkles size={28} /> AI 智能记账
         </label>
         <div className="flex gap-4">
           <input
@@ -507,7 +507,7 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
             onClick={toggleListening}
             className={`p-5 rounded-2xl transition-colors ${isRecording ? 'bg-red-500 text-white animate-pulse shadow-xl shadow-red-200' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
           >
-            <Mic size={28} />
+            <Mic size={32} />
           </button>
           <button
             type="button"
@@ -515,7 +515,7 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
             disabled={isAnalyzing || !smartInput}
             className="p-5 bg-brand-600 text-white rounded-2xl hover:bg-brand-700 disabled:opacity-50"
           >
-            {isAnalyzing ? <Loader2 size={28} className="animate-spin" /> : <Send size={28} />}
+            {isAnalyzing ? <Loader2 size={32} className="animate-spin" /> : <Send size={32} />}
           </button>
         </div>
       </div>
@@ -584,7 +584,7 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
 
         <div className="grid grid-cols-2 gap-6">
           <div>
-            <label className="block text-xl font-bold text-gray-500 mb-4 flex items-center gap-2 ml-3"><Tag size={24}/> 分类</label>
+            <label className="block text-xl font-bold text-gray-500 mb-4 flex items-center gap-2 ml-3"><Tag size={28}/> 分类</label>
             <div className="relative">
                <select
                 value={category}
@@ -598,7 +598,7 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
             </div>
           </div>
           <div>
-            <label className="block text-xl font-bold text-gray-500 mb-4 flex items-center gap-2 ml-3"><Calendar size={24}/> 日期</label>
+            <label className="block text-xl font-bold text-gray-500 mb-4 flex items-center gap-2 ml-3"><Calendar size={28}/> 日期</label>
             <input
               type="date"
               value={date}
@@ -609,7 +609,7 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
         </div>
 
         <div>
-          <label className="block text-xl font-bold text-gray-500 mb-4 flex items-center gap-2 ml-3"><FileText size={24}/> 备注 (选填)</label>
+          <label className="block text-xl font-bold text-gray-500 mb-4 flex items-center gap-2 ml-3"><FileText size={28}/> 备注 (选填)</label>
           <input
             type="text"
             value={note}
@@ -635,7 +635,7 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
 
 // 工具函数
 const getCategoryIcon = (category: string) => {
-  const size = 40;
+  const size = 44;
   switch (category) {
     case '餐饮': return <Coffee size={size} />;
     case '购物': return <ShoppingBag size={size} />;
@@ -916,7 +916,7 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
                         transition={{ duration: 0.2 }}
                         className="ml-2"
                       >
-                        <ChevronDown className="w-5 h-5 text-gray-400" />
+                        <ChevronDown className="w-6 h-6 text-gray-400" />
                       </motion.div>
                     </button>
 

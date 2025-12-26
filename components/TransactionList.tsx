@@ -10,7 +10,7 @@ interface TransactionListProps {
 }
 
 const getCategoryIcon = (category: string) => {
-  const size = 28; // Adjusted for 16px baseline
+  const size = 32; // Adjusted for 20px baseline
   switch (category) {
     case '餐饮': return <Coffee size={size} />;
     case '购物': return <ShoppingBag size={size} />;
