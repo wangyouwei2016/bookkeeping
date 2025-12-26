@@ -749,34 +749,34 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
   }, [timeFilter, selectedDate]);
 
   return (
-    <div className="p-6 space-y-10 pb-48">
-      <header className="flex justify-between items-center pt-4">
-         <h2 className="text-3xl font-bold text-gray-800">统计报表</h2>
-         <div className="flex bg-gray-100 p-2 rounded-2xl">
+    <div className="p-8 space-y-12 pb-48">
+      <header className="flex justify-between items-center pt-6">
+         <h2 className="text-4xl font-bold text-gray-800">统计报表</h2>
+         <div className="flex bg-gray-100 p-3 rounded-2xl">
             <button
               onClick={() => setTimeFilter('month')}
-              className={`px-5 py-3 text-lg font-bold rounded-xl transition-all ${timeFilter === 'month' ? 'bg-white shadow text-brand-600' : 'text-gray-500'}`}
+              className={`px-6 py-4 text-xl font-bold rounded-xl transition-all ${timeFilter === 'month' ? 'bg-white shadow text-brand-600' : 'text-gray-500'}`}
             >
               月度
             </button>
             <button
               onClick={() => setTimeFilter('year')}
-              className={`px-5 py-3 text-lg font-bold rounded-xl transition-all ${timeFilter === 'year' ? 'bg-white shadow text-brand-600' : 'text-gray-500'}`}
+              className={`px-6 py-4 text-xl font-bold rounded-xl transition-all ${timeFilter === 'year' ? 'bg-white shadow text-brand-600' : 'text-gray-500'}`}
             >
               年度
             </button>
          </div>
       </header>
 
-      <div className="flex items-center justify-between bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+      <div className="flex items-center justify-between bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
          <button onClick={() => {
             const newDate = new Date(selectedDate);
             if(timeFilter === 'month') newDate.setMonth(newDate.getMonth() - 1);
             else newDate.setFullYear(newDate.getFullYear() - 1);
             setSelectedDate(newDate);
-         }} className="p-4 text-gray-400 hover:text-gray-600 active:scale-90 transition-transform bg-gray-50 rounded-2xl">{'<'}</button>
+         }} className="p-5 text-gray-400 hover:text-gray-600 active:scale-90 transition-transform bg-gray-50 rounded-2xl">{'<'}</button>
 
-         <div className="font-bold text-2xl text-gray-800">
+         <div className="font-bold text-3xl text-gray-800">
            {selectedDate.getFullYear()}年
            {timeFilter === 'month' && ` ${selectedDate.getMonth() + 1}月`}
          </div>
@@ -786,43 +786,43 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
             if(timeFilter === 'month') newDate.setMonth(newDate.getMonth() + 1);
             else newDate.setFullYear(newDate.getFullYear() + 1);
             setSelectedDate(newDate);
-         }} className="p-4 text-gray-400 hover:text-gray-600 active:scale-90 transition-transform bg-gray-50 rounded-2xl">{'>'}</button>
+         }} className="p-5 text-gray-400 hover:text-gray-600 active:scale-90 transition-transform bg-gray-50 rounded-2xl">{'>'}</button>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
-         <div className="bg-emerald-50 p-6 rounded-3xl border border-emerald-100">
-            <div className="text-lg text-emerald-600 mb-4 font-bold">总收入</div>
-            <div className="text-3xl font-extrabold text-emerald-700">+{totalIncome.toFixed(0)}</div>
+      <div className="grid grid-cols-2 gap-8">
+         <div className="bg-emerald-50 p-8 rounded-3xl border border-emerald-100">
+            <div className="text-xl text-emerald-600 mb-5 font-bold">总收入</div>
+            <div className="text-4xl font-extrabold text-emerald-700">+{totalIncome.toFixed(0)}</div>
          </div>
-         <div className="bg-rose-50 p-6 rounded-3xl border border-rose-100">
-            <div className="text-lg text-rose-600 mb-4 font-bold">总支出</div>
-            <div className="text-3xl font-extrabold text-rose-700">-{totalExpense.toFixed(0)}</div>
+         <div className="bg-rose-50 p-8 rounded-3xl border border-rose-100">
+            <div className="text-xl text-rose-600 mb-5 font-bold">总支出</div>
+            <div className="text-4xl font-extrabold text-rose-700">-{totalExpense.toFixed(0)}</div>
          </div>
       </div>
 
       {/* Annual Trend Chart (Only for Year view) */}
       {timeFilter === 'year' && (
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-          <h3 className="text-xl font-bold text-gray-500 uppercase tracking-wider mb-8">存钱趋势 (月度结余)</h3>
-          <div className="h-64 w-full">
+        <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+          <h3 className="text-2xl font-bold text-gray-500 uppercase tracking-wider mb-10">存钱趋势 (月度结余)</h3>
+          <div className="h-80 w-full">
              <ResponsiveContainer width="100%" height="100%">
-               <LineChart data={annualTrendData} margin={{ left: 10, right: 30, top: 20, bottom: 10 }}>
+               <LineChart data={annualTrendData} margin={{ left: 15, right: 35, top: 25, bottom: 15 }}>
                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
-                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 14, fill: '#9ca3af', dy: 10}} />
+                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fontSize: 18, fill: '#9ca3af', dy: 15}} />
                  <ReferenceLine y={0} stroke="#9ca3af" strokeDasharray="3 3" />
                  <RechartsTooltip
                    formatter={(value: number) => `¥${value.toFixed(0)}`}
-                   contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 4px 12px -4px rgba(0, 0, 0, 0.1)', fontSize: '14px', padding: '12px' }}
-                   labelStyle={{ fontWeight: 'bold', color: '#374151', marginBottom: '4px' }}
+                   contentStyle={{ borderRadius: '20px', border: 'none', boxShadow: '0 6px 16px -4px rgba(0, 0, 0, 0.1)', fontSize: '18px', padding: '16px' }}
+                   labelStyle={{ fontWeight: 'bold', color: '#374151', marginBottom: '6px', fontSize: '16px' }}
                  />
                  <Line
                    type="monotone"
                    dataKey="balance"
                    name="结余"
                    stroke="#14b8a6"
-                   strokeWidth={3}
-                   dot={{ r: 4, fill: '#14b8a6', strokeWidth: 3, stroke: '#fff' }}
-                   activeDot={{ r: 6, strokeWidth: 0 }}
+                   strokeWidth={4}
+                   dot={{ r: 6, fill: '#14b8a6', strokeWidth: 4, stroke: '#fff' }}
+                   activeDot={{ r: 10, strokeWidth: 0 }}
                  />
                </LineChart>
              </ResponsiveContainer>
@@ -832,57 +832,57 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
 
       {(expenseData.length > 0 || totalIncome > 0) ? (
         <>
-          <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-            <h3 className="text-xl font-bold text-gray-500 uppercase tracking-wider mb-8">收支对比</h3>
-            <div className="h-64 w-full">
+          <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+            <h3 className="text-2xl font-bold text-gray-500 uppercase tracking-wider mb-10">收支对比</h3>
+            <div className="h-80 w-full">
                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart layout="vertical" data={userStatsData} barGap={12} margin={{ left: 10, right: 10, top: 10, bottom: 10 }}>
+                  <BarChart layout="vertical" data={userStatsData} barGap={16} margin={{ left: 15, right: 15, top: 15, bottom: 15 }}>
                     <XAxis type="number" hide />
-                    <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={60} style={{fontSize: '16px', fontWeight: 'bold'}} />
-                    <RechartsTooltip formatter={(value: number) => `¥${value.toFixed(2)}`} cursor={{fill: 'transparent'}} contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 4px 12px -4px rgba(0, 0, 0, 0.1)', fontSize: '14px', padding: '12px' }} />
-                    <Legend verticalAlign="top" align="right" iconType="circle" height={50} wrapperStyle={{ fontSize: '14px', fontWeight: 'bold' }}/>
-                    <Bar dataKey="income" name="收入" fill="#10b981" radius={[0, 8, 8, 0]} barSize={30} />
-                    <Bar dataKey="expense" name="支出" fill="#f43f5e" radius={[0, 8, 8, 0]} barSize={30} />
+                    <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={80} style={{fontSize: '20px', fontWeight: 'bold'}} />
+                    <RechartsTooltip formatter={(value: number) => `¥${value.toFixed(2)}`} cursor={{fill: 'transparent'}} contentStyle={{ borderRadius: '20px', border: 'none', boxShadow: '0 6px 16px -4px rgba(0, 0, 0, 0.1)', fontSize: '18px', padding: '16px' }} />
+                    <Legend verticalAlign="top" align="right" iconType="circle" height={60} wrapperStyle={{ fontSize: '18px', fontWeight: 'bold' }}/>
+                    <Bar dataKey="income" name="收入" fill="#10b981" radius={[0, 10, 10, 0]} barSize={40} />
+                    <Bar dataKey="expense" name="支出" fill="#f43f5e" radius={[0, 10, 10, 0]} barSize={40} />
                   </BarChart>
                </ResponsiveContainer>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-            <h3 className="text-xl font-bold text-gray-500 uppercase tracking-wider mb-8">支出分类占比</h3>
-            <div className="h-64 w-full">
+          <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+            <h3 className="text-2xl font-bold text-gray-500 uppercase tracking-wider mb-10">支出分类占比</h3>
+            <div className="h-80 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
                       data={expenseData}
                       cx="50%"
                       cy="50%"
-                      innerRadius={60}
-                      outerRadius={90}
-                      paddingAngle={4}
+                      innerRadius={80}
+                      outerRadius={120}
+                      paddingAngle={5}
                       dataKey="value"
                     >
                       {expenseData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
-                    <RechartsTooltip formatter={(value: number) => `¥${value.toFixed(2)}`} contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 4px 12px -4px rgba(0, 0, 0, 0.1)', fontSize: '14px', padding: '12px' }}/>
-                    <Legend verticalAlign="bottom" height={40} iconType="circle" wrapperStyle={{ fontSize: '14px', fontWeight: 'bold', paddingTop: '16px' }} />
+                    <RechartsTooltip formatter={(value: number) => `¥${value.toFixed(2)}`} contentStyle={{ borderRadius: '20px', border: 'none', boxShadow: '0 6px 16px -4px rgba(0, 0, 0, 0.1)', fontSize: '18px', padding: '16px' }}/>
+                    <Legend verticalAlign="bottom" height={50} iconType="circle" wrapperStyle={{ fontSize: '18px', fontWeight: 'bold', paddingTop: '20px' }} />
                   </PieChart>
                 </ResponsiveContainer>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-            <h3 className="text-xl font-bold text-gray-500 uppercase tracking-wider mb-8">支出排行榜</h3>
-            <div className="space-y-6">
+          <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+            <h3 className="text-2xl font-bold text-gray-500 uppercase tracking-wider mb-10">支出排行榜</h3>
+            <div className="space-y-8">
               {expenseData.map((item, index) => {
                 const percent = totalExpense > 0 ? (item.value / totalExpense * 100).toFixed(1) : '0.0';
                 const isExpanded = expandedCategory === item.name;
                 const categoryTransactions = getTransactionsByCategory(item.name);
 
                 return (
-                  <div key={item.name} className="space-y-3">
+                  <div key={item.name} className="space-y-4">
                     {/* 主排行榜项 - 可点击展开 */}
                     <button
                       onClick={() => {
@@ -890,8 +890,8 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
                       }}
                       className="w-full flex items-center justify-between active:scale-[0.99] transition-transform"
                     >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold shrink-0 ${
+                      <div className="flex items-center gap-5">
+                        <div className={`w-16 h-16 rounded-xl flex items-center justify-center text-xl font-bold shrink-0 ${
                           index === 0 ? 'bg-yellow-100 text-yellow-600' :
                           index === 1 ? 'bg-gray-200 text-gray-600' :
                           index === 2 ? 'bg-orange-100 text-orange-600' :
@@ -900,23 +900,23 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
                           {index + 1}
                         </div>
                         <div>
-                          <div className="text-xl font-bold text-gray-800">{item.name}</div>
-                          <div className="w-24 bg-gray-100 h-2 rounded-full mt-2 overflow-hidden">
+                          <div className="text-2xl font-bold text-gray-800">{item.name}</div>
+                          <div className="w-32 bg-gray-100 h-3 rounded-full mt-3 overflow-hidden">
                              <div className="bg-brand-500 h-full rounded-full" style={{ width: `${percent}%` }}></div>
                           </div>
                         </div>
                       </div>
                       <div className="text-right">
-                         <div className="text-xl font-bold text-gray-900">¥{item.value.toFixed(0)}</div>
-                         <div className="text-sm text-gray-400 mt-1">{percent}%</div>
+                         <div className="text-2xl font-bold text-gray-900">¥{item.value.toFixed(0)}</div>
+                         <div className="text-base text-gray-400 mt-1">{percent}%</div>
                       </div>
                       {/* 展开指示器 */}
                       <motion.div
                         animate={{ rotate: isExpanded ? 180 : 0 }}
                         transition={{ duration: 0.2 }}
-                        className="ml-2"
+                        className="ml-3"
                       >
-                        <ChevronDown className="w-6 h-6 text-gray-400" />
+                        <ChevronDown className="w-8 h-8 text-gray-400" />
                       </motion.div>
                     </button>
 
@@ -930,38 +930,38 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
                           transition={{ duration: 0.3, ease: 'easeInOut' }}
                           className="overflow-hidden"
                         >
-                          <div className="pt-3 pl-10 space-y-2">
+                          <div className="pt-4 pl-14 space-y-3">
                             {/* 明细列表 */}
                             {categoryTransactions.length === 0 ? (
-                              <div className="text-center py-4 text-gray-400 text-sm">
+                              <div className="text-center py-6 text-gray-400 text-base">
                                 该分类暂无支出记录
                               </div>
                             ) : (
                               categoryTransactions.map((transaction) => (
-                                <div key={transaction.id} className="flex items-center justify-between bg-gray-50 rounded-xl p-3">
-                                  <div className="flex items-center gap-3">
-                                    <div className="p-2 rounded-lg bg-white text-red-500">
+                                <div key={transaction.id} className="flex items-center justify-between bg-gray-50 rounded-xl p-4">
+                                  <div className="flex items-center gap-4">
+                                    <div className="p-3 rounded-lg bg-white text-red-500">
                                       {getCategoryIcon(transaction.category)}
                                     </div>
                                     <div>
-                                      <div className="text-base font-bold text-gray-800">{transaction.category}</div>
-                                      <div className="text-xs text-gray-400 flex items-center gap-2">
+                                      <div className="text-lg font-bold text-gray-800">{transaction.category}</div>
+                                      <div className="text-sm text-gray-400 flex items-center gap-2">
                                         <span>{formatDate(transaction.date)}</span>
-                                        <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
-                                        <span className={`px-1.5 py-0.5 rounded text-xs font-bold ${
+                                        <span className="w-1.5 h-1.5 bg-gray-300 rounded-full"></span>
+                                        <span className={`px-2 py-0.5 rounded text-xs font-bold ${
                                           transaction.user === 'husband' ? 'bg-blue-50 text-blue-600' : 'bg-pink-50 text-pink-600'
                                         }`}>
                                           {formatUser(transaction.user)}
                                         </span>
                                       </div>
                                       {transaction.note && (
-                                        <div className="text-gray-400 text-xs mt-0.5 truncate max-w-[150px]">
+                                        <div className="text-gray-400 text-sm mt-1 truncate max-w-[200px]">
                                           {transaction.note}
                                         </div>
                                       )}
                                     </div>
                                   </div>
-                                  <div className="font-bold text-lg text-gray-900">
+                                  <div className="font-bold text-xl text-gray-900">
                                     -{transaction.amount.toFixed(0)}
                                   </div>
                                 </div>
@@ -969,7 +969,7 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
                             )}
                             {/* 总数显示 */}
                             {categoryTransactions.length > 0 && (
-                              <div className="text-center text-gray-500 text-sm pt-2">
+                              <div className="text-center text-gray-500 text-base pt-3">
                                 共 {categoryTransactions.length} 笔交易
                               </div>
                             )}
@@ -984,7 +984,7 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
           </div>
         </>
       ) : (
-        <div className="text-center py-20 text-gray-300 text-xl font-medium">该时间段暂无数据</div>
+        <div className="text-center py-24 text-gray-300 text-2xl font-medium">该时间段暂无数据</div>
       )}
     </div>
   );
