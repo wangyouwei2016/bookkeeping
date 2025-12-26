@@ -2,49 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Mobile optimizations to make it feel like a Native App */
+/* Mobile optimizations - 统一基准字体 */
 
 html {
-  /* 
-     跨平台字体优化方案：
-     1. 完全禁止 iOS 的自动字体缩放
-     2. Android 使用 24px 大字体，清晰易读
-     3. iOS 使用 12px 保证布局稳定，不会出格或挤压
-     4. iOS 规则放在最后，确保优先级最高
-  */
-  font-size: 24px !important;
-  -webkit-text-size-adjust: none !important;
-  text-size-adjust: none !important;
+  /* 统一使用 16px 基准，解决 Android/iOS 显示不一致问题 */
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   touch-action: manipulation;
-}
-
-/* 桌面端使用默认字体大小 */
-@media (min-width: 768px) {
-  html {
-    font-size: 16px !important;
-  }
-}
-
-/* iOS设备使用小字体 - 放在最后确保优先级最高 */
-@supports (-webkit-touch-callout: none) {
-  html {
-    font-size: 12px !important;
-  }
-  
-  /* 即使是大屏iOS也强制使用小字体，保证布局一致 */
-  @media (min-width: 768px) {
-    html {
-      font-size: 12px !important;
-    }
-  }
 }
 
 body {
   -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none; /* Disable long-press menu */
-  -webkit-user-select: none;   /* Disable text selection */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
   user-select: none;
-  overscroll-behavior-y: none; /* Prevent pull-to-refresh bounce */
+  overscroll-behavior-y: none;
   @apply bg-gray-50 text-gray-800 font-sans antialiased;
 }
 
