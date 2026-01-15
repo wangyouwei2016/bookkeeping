@@ -1,7 +1,7 @@
 
 export type TransactionType = 'expense' | 'income';
 
-export type UserType = 'husband' | 'wife';
+export type UserType = 'husband' | 'wife' | 'xi';
 
 export interface Transaction {
   id: string;

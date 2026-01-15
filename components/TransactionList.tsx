@@ -47,7 +47,12 @@ const formatDate = (dateStr: string) => {
 };
 
 const formatUser = (user: string) => {
-  return user === 'husband' ? '丈夫' : '妻子';
+  switch (user) {
+    case 'husband': return '为';
+    case 'wife': return '娜';
+    case 'xi': return '熙';
+    default: return '未知';
+  }
 };
 
 const TransactionList: React.FC<TransactionListProps> = ({ transactions, onDelete, hasMore, onLoadMore }) => {
@@ -115,7 +120,7 @@ const TransactionList: React.FC<TransactionListProps> = ({ transactions, onDelet
                 <div className="text-xs sm:text-sm text-gray-400 flex items-center gap-2 flex-wrap">
                   <span className="shrink-0 font-medium">{formatDate(t.date)}</span>
                   <span className="w-1 h-1 bg-gray-200 rounded-full shrink-0"></span>
-                  <span className={`px-1.5 py-0.5 rounded text-xs font-bold shrink-0 ${t.user === 'husband' ? 'bg-blue-50 text-blue-600' : 'bg-pink-50 text-pink-600'}`}>
+                  <span className={`px-1.5 py-0.5 rounded text-xs font-bold shrink-0 ${t.user === 'husband' ? 'bg-blue-50 text-blue-600' : t.user === 'wife' ? 'bg-pink-50 text-pink-600' : 'bg-purple-50 text-purple-600'}`}>
                     {formatUser(t.user)}
                   </span>
                 </div>

@@ -1,6 +1,6 @@
 {
-  "name": "夫妻账本",
-  "short_name": "夫妻账本",
+  "name": "家庭账本",
+  "short_name": "家庭账本",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#f9fafb",

@@ -176,7 +176,7 @@ const LoginScreen = ({ onLogin, onResetConfig }: { onLogin: (user: UserType) => 
       <div className="w-16 h-16 sm:w-24 sm:h-24 bg-brand-500 rounded-2xl sm:rounded-3xl flex items-center justify-center shadow-xl shadow-brand-200 mb-6 sm:mb-10 rotate-3 z-10">
         <Sparkles className="w-8 h-8 sm:w-12 sm:h-12 text-white" />
       </div>
-      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-3 sm:mb-5 z-10 tracking-tight">夫妻账本</h1>
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-3 sm:mb-5 z-10 tracking-tight">家庭账本</h1>
       <p className="text-gray-500 mb-8 sm:mb-12 text-lg sm:text-xl md:text-2xl z-10 font-medium">请选择您的身份</p>
 
       <div className="space-y-4 sm:space-y-6 w-full max-w-md sm:max-w-lg z-10">
@@ -187,7 +187,7 @@ const LoginScreen = ({ onLogin, onResetConfig }: { onLogin: (user: UserType) => 
           <div className="w-12 h-12 sm:w-14 sm:h-14 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
             <UserIcon className="w-6 h-6 sm:w-8 sm:h-8" />
           </div>
-          <span className="font-bold text-xl sm:text-2xl md:text-3xl">我是丈夫</span>
+          <span className="font-bold text-xl sm:text-2xl md:text-3xl">我是为</span>
         </button>
 
         <button
@@ -197,7 +197,17 @@ const LoginScreen = ({ onLogin, onResetConfig }: { onLogin: (user: UserType) => 
           <div className="w-12 h-12 sm:w-14 sm:h-14 bg-pink-100 rounded-full flex items-center justify-center text-pink-600">
             <UserIcon className="w-6 h-6 sm:w-8 sm:h-8" />
           </div>
-          <span className="font-bold text-xl sm:text-2xl md:text-3xl">我是妻子</span>
+          <span className="font-bold text-xl sm:text-2xl md:text-3xl">我是娜</span>
+        </button>
+
+        <button
+          onClick={() => onLogin('xi')}
+          className="w-full py-5 sm:py-6 bg-white hover:bg-purple-50 border-4 border-white hover:border-purple-100 text-gray-800 rounded-2xl sm:rounded-3xl shadow-lg flex items-center justify-center gap-3 sm:gap-5 transition-all active:scale-[0.98]"
+        >
+          <div className="w-12 h-12 sm:w-14 sm:h-14 bg-purple-100 rounded-full flex items-center justify-center text-purple-600">
+            <UserIcon className="w-6 h-6 sm:w-8 sm:h-8" />
+          </div>
+          <span className="font-bold text-xl sm:text-2xl md:text-3xl">我是熙</span>
         </button>
       </div>
     </div>
@@ -249,7 +259,7 @@ const Dashboard = ({
       <header className="flex justify-between items-center pt-4 sm:pt-6">
         <div>
            <p className="text-base sm:text-lg md:text-xl text-gray-500 font-medium">
-             当前身份: <span className="font-bold text-brand-600 bg-brand-50 px-3 py-1 rounded-xl sm:rounded-2xl">{currentUser === 'husband' ? '丈夫' : '妻子'}</span>
+             当前身份: <span className="font-bold text-brand-600 bg-brand-50 px-3 py-1 rounded-xl sm:rounded-2xl">{currentUser === 'husband' ? '为' : currentUser === 'wife' ? '娜' : '熙'}</span>
            </p>
         </div>
         <button onClick={onChangeUser} className="p-4 sm:p-5 bg-white rounded-2xl sm:rounded-[2rem] shadow-sm border border-gray-100 text-gray-400 hover:text-brand-600 active:scale-95 transition-all">
@@ -531,7 +541,7 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
                  activeUser === 'husband' ? 'bg-blue-100 text-blue-700' : 'bg-gray-200 text-gray-500'
                }`}
              >
-               丈夫
+               为
              </button>
              <button
                type="button"
@@ -540,7 +550,16 @@ const AddTransaction = ({ onAdd, currentUser, isSaving }: { onAdd: (t: Transacti
                  activeUser === 'wife' ? 'bg-pink-100 text-pink-700' : 'bg-gray-200 text-gray-500'
                }`}
              >
-               妻子
+               娜
+             </button>
+             <button
+               type="button"
+               onClick={() => setActiveUser('xi')}
+               className={`flex-1 py-4 rounded-2xl text-xl font-bold transition-colors ${
+                 activeUser === 'xi' ? 'bg-purple-100 text-purple-700' : 'bg-gray-200 text-gray-500'
+               }`}
+             >
+               熙
              </button>
            </div>
         </div>
@@ -666,7 +685,12 @@ const formatDate = (dateStr: string) => {
 };
 
 const formatUser = (user: string) => {
-  return user === 'husband' ? '丈夫' : '妻子';
+  switch (user) {
+    case 'husband': return '为';
+    case 'wife': return '娜';
+    case 'xi': return '熙';
+    default: return '未知';
+  }
 };
 
 // 3. STATS PAGE
@@ -700,13 +724,14 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
     .sort((a, b) => b.value - a.value);
 
   // New logic: User Income vs Expense
-  const userStatsMap = {
-    husband: { name: '丈夫', income: 0, expense: 0 },
-    wife: { name: '妻子', income: 0, expense: 0 }
+  const userStatsMap: Record<string, { name: string; income: number; expense: number }> = {
+    husband: { name: '为', income: 0, expense: 0 },
+    wife: { name: '娜', income: 0, expense: 0 },
+    xi: { name: '熙', income: 0, expense: 0 }
   };
 
   filteredTransactions.forEach(t => {
-    const u = t.user as 'husband' | 'wife';
+    const u = t.user as UserType;
     if (userStatsMap[u]) {
       if (t.type === 'income') {
          userStatsMap[u].income += t.amount;
@@ -715,8 +740,8 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
       }
     }
   });
-  
-  const userStatsData = [userStatsMap.husband, userStatsMap.wife];
+
+  const userStatsData = [userStatsMap.husband, userStatsMap.wife, userStatsMap.xi];
 
   const totalExpense = filteredTransactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
   const totalIncome = filteredTransactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
@@ -949,7 +974,7 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
                                         <span>{formatDate(transaction.date)}</span>
                                         <span className="w-1.5 h-1.5 bg-gray-300 rounded-full"></span>
                                         <span className={`px-2 py-0.5 rounded text-xs font-bold ${
-                                          transaction.user === 'husband' ? 'bg-blue-50 text-blue-600' : 'bg-pink-50 text-pink-600'
+                                          transaction.user === 'husband' ? 'bg-blue-50 text-blue-600' : transaction.user === 'wife' ? 'bg-pink-50 text-pink-600' : 'bg-purple-50 text-purple-600'
                                         }`}>
                                           {formatUser(transaction.user)}
                                         </span>
