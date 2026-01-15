@@ -698,6 +698,7 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
   const [timeFilter, setTimeFilter] = useState<'month' | 'year'>('month');
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+  const [categoryFilter, setCategoryFilter] = useState<'all' | 'husband' | 'wife' | 'xi'>('all');
 
   const filteredTransactions = transactions.filter(t => {
     const d = new Date(t.date);
@@ -722,6 +723,18 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
       return acc;
     }, [] as { name: string; value: number }[])
     .sort((a, b) => b.value - a.value);
+
+  // Category expense by user filter
+  const categoryExpenseData = categoryFilter === 'all' ? expenseData :
+    filteredTransactions
+      .filter(t => t.type === 'expense' && t.user === categoryFilter)
+      .reduce((acc, curr) => {
+        const found = acc.find(item => item.name === curr.category);
+        if (found) found.value += curr.amount;
+        else acc.push({ name: curr.category, value: curr.amount });
+        return acc;
+      }, [] as { name: string; value: number }[])
+      .sort((a, b) => b.value - a.value);
 
   // New logic: User Income vs Expense
   const userStatsMap: Record<string, { name: string; income: number; expense: number }> = {
@@ -858,28 +871,50 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
       {(expenseData.length > 0 || totalIncome > 0) ? (
         <>
           <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-            <h3 className="text-2xl font-bold text-gray-500 uppercase tracking-wider mb-10">收支对比</h3>
-            <div className="h-80 w-full">
+            <h3 className="text-2xl font-bold text-gray-500 uppercase tracking-wider mb-10">个人支出对比</h3>
+            <div className="h-60 w-full">
                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart layout="vertical" data={userStatsData} barGap={16} margin={{ left: 15, right: 15, top: 15, bottom: 15 }}>
-                    <XAxis type="number" hide />
-                    <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={80} style={{fontSize: '20px', fontWeight: 'bold'}} />
+                  <BarChart layout="vertical" data={userStatsData} barGap={20} margin={{ left: 15, right: 60, top: 15, bottom: 15 }}>
+                    <XAxis type="number" axisLine={false} tickLine={false} tick={{fontSize: 18, fill: '#9ca3af'}} tickFormatter={(v) => `¥${v.toFixed(0)}`} />
+                    <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={60} style={{fontSize: '22px', fontWeight: 'bold'}} />
                     <RechartsTooltip formatter={(value: number) => `¥${value.toFixed(2)}`} cursor={{fill: 'transparent'}} contentStyle={{ borderRadius: '20px', border: 'none', boxShadow: '0 6px 16px -4px rgba(0, 0, 0, 0.1)', fontSize: '18px', padding: '16px' }} />
-                    <Legend verticalAlign="top" align="right" iconType="circle" height={60} wrapperStyle={{ fontSize: '18px', fontWeight: 'bold' }}/>
-                    <Bar dataKey="income" name="收入" fill="#10b981" radius={[0, 10, 10, 0]} barSize={40} />
-                    <Bar dataKey="expense" name="支出" fill="#f43f5e" radius={[0, 10, 10, 0]} barSize={40} />
+                    <Bar dataKey="expense" name="支出" radius={[0, 10, 10, 0]} barSize={50} label={{ position: 'right', fill: '#374151', fontSize: 18, fontWeight: 'bold', formatter: (v: number) => `¥${v.toFixed(0)}` }}>
+                      {userStatsData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={index === 0 ? '#3b82f6' : index === 1 ? '#ec4899' : '#8b5cf6'} />
+                      ))}
+                    </Bar>
                   </BarChart>
                </ResponsiveContainer>
             </div>
           </div>
 
           <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-            <h3 className="text-2xl font-bold text-gray-500 uppercase tracking-wider mb-10">支出分类占比</h3>
+            <div className="flex items-center justify-between mb-8">
+              <h3 className="text-2xl font-bold text-gray-500 uppercase tracking-wider">支出分类占比</h3>
+              <div className="flex gap-3 bg-gray-100 p-2 rounded-2xl">
+                {['all', 'husband', 'wife', 'xi'].map((key) => (
+                  <button
+                    key={key}
+                    onClick={() => setCategoryFilter(key as 'all' | 'husband' | 'wife' | 'xi')}
+                    className={`px-4 py-2 rounded-xl font-bold transition-all ${
+                      categoryFilter === key
+                        ? key === 'all' ? 'bg-white text-brand-600 shadow' :
+                          key === 'husband' ? 'bg-white text-blue-600 shadow' :
+                          key === 'wife' ? 'bg-white text-pink-600 shadow' :
+                          'bg-white text-purple-600 shadow'
+                        : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                  >
+                    {key === 'all' ? '全部' : key === 'husband' ? '为' : key === 'wife' ? '娜' : '熙'}
+                  </button>
+                ))}
+              </div>
+            </div>
             <div className="h-80 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
-                      data={expenseData}
+                      data={categoryFilter === 'all' ? expenseData : categoryExpenseData}
                       cx="50%"
                       cy="50%"
                       innerRadius={80}
@@ -887,7 +922,7 @@ const Stats = ({ transactions }: { transactions: Transaction[] }) => {
                       paddingAngle={5}
                       dataKey="value"
                     >
-                      {expenseData.map((entry, index) => (
+                      {(categoryFilter === 'all' ? expenseData : categoryExpenseData).map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
